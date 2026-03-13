@@ -1,18 +1,19 @@
 import React, { useState, useRef } from 'react';
 import {
-  View,
-  Text,
   TextInput,
-  TouchableOpacity,
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Eye, EyeOff, Mail, Lock, User } from 'lucide-react-native';
 
+import { Box } from '@/components/ui/box';
+import { Input, InputField } from '@/components/ui/input';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Spinner } from '@/components/ui/spinner';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/context/auth-context';
@@ -65,7 +66,7 @@ export default function RegisterScreen() {
     }
   };
 
-  const inputStyle = (focused: boolean) => ({
+  const inputContainerStyle = (focused: boolean) => ({
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     backgroundColor: c.card,
@@ -89,7 +90,7 @@ export default function RegisterScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View
+        <Box
           style={{
             paddingTop: insets.top + 16,
             paddingHorizontal: 24,
@@ -97,7 +98,7 @@ export default function RegisterScreen() {
             backgroundColor: '#0F1628',
           }}
         >
-          <TouchableOpacity
+          <Pressable
             onPress={() => router.back()}
             style={{
               width: 38,
@@ -110,7 +111,7 @@ export default function RegisterScreen() {
             }}
           >
             <ArrowLeft color="rgba(255,255,255,0.8)" size={20} />
-          </TouchableOpacity>
+          </Pressable>
           <Text
             style={{
               color: '#FFFFFF',
@@ -125,10 +126,10 @@ export default function RegisterScreen() {
           <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>
             Join and begin your inner journey
           </Text>
-        </View>
+        </Box>
 
         {/* Form */}
-        <View
+        <Box
           style={{
             flex: 1,
             backgroundColor: c.background,
@@ -142,7 +143,7 @@ export default function RegisterScreen() {
         >
           {/* Error */}
           {error ? (
-            <View
+            <Box
               style={{
                 backgroundColor: '#FF444415',
                 borderRadius: 12,
@@ -154,11 +155,11 @@ export default function RegisterScreen() {
               }}
             >
               <Text style={{ color: '#FF4444', fontSize: 13 }}>{error}</Text>
-            </View>
+            </Box>
           ) : null}
 
           {/* Full Name */}
-          <View style={{ marginBottom: 14 }}>
+          <Box style={{ marginBottom: 14 }}>
             <Text
               style={{
                 color: c.text,
@@ -170,26 +171,28 @@ export default function RegisterScreen() {
             >
               Full Name
             </Text>
-            <View style={inputStyle(nameFocused)}>
+            <Box style={inputContainerStyle(nameFocused)}>
               <User color={nameFocused ? c.gold : c.muted} size={17} />
-              <TextInput
-                style={{ flex: 1, color: c.text, fontSize: 15, padding: 0 }}
-                placeholder="Your name"
-                placeholderTextColor={c.muted}
-                value={name}
-                onChangeText={setName}
-                onFocus={() => setNameFocused(true)}
-                onBlur={() => setNameFocused(false)}
-                autoCapitalize="words"
-                autoCorrect={false}
-                returnKeyType="next"
-                onSubmitEditing={() => emailRef.current?.focus()}
-              />
-            </View>
-          </View>
+              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+                <InputField
+                  style={{ color: c.text, fontSize: 15, padding: 0 }}
+                  placeholder="Your name"
+                  placeholderTextColor={c.muted}
+                  value={name}
+                  onChangeText={setName}
+                  onFocus={() => setNameFocused(true)}
+                  onBlur={() => setNameFocused(false)}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  onSubmitEditing={() => emailRef.current?.focus()}
+                />
+              </Input>
+            </Box>
+          </Box>
 
           {/* Email */}
-          <View style={{ marginBottom: 14 }}>
+          <Box style={{ marginBottom: 14 }}>
             <Text
               style={{
                 color: c.text,
@@ -201,28 +204,30 @@ export default function RegisterScreen() {
             >
               Email
             </Text>
-            <View style={inputStyle(emailFocused)}>
+            <Box style={inputContainerStyle(emailFocused)}>
               <Mail color={emailFocused ? c.gold : c.muted} size={17} />
-              <TextInput
-                ref={emailRef}
-                style={{ flex: 1, color: c.text, fontSize: 15, padding: 0 }}
-                placeholder="you@example.com"
-                placeholderTextColor={c.muted}
-                value={email}
-                onChangeText={setEmail}
-                onFocus={() => setEmailFocused(true)}
-                onBlur={() => setEmailFocused(false)}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType="next"
-                onSubmitEditing={() => passwordRef.current?.focus()}
-              />
-            </View>
-          </View>
+              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+                <InputField
+                  ref={emailRef}
+                  style={{ color: c.text, fontSize: 15, padding: 0 }}
+                  placeholder="you@example.com"
+                  placeholderTextColor={c.muted}
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setEmailFocused(true)}
+                  onBlur={() => setEmailFocused(false)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  onSubmitEditing={() => passwordRef.current?.focus()}
+                />
+              </Input>
+            </Box>
+          </Box>
 
           {/* Password */}
-          <View style={{ marginBottom: 8 }}>
+          <Box style={{ marginBottom: 8 }}>
             <Text
               style={{
                 color: c.text,
@@ -234,24 +239,26 @@ export default function RegisterScreen() {
             >
               Password
             </Text>
-            <View style={inputStyle(passwordFocused)}>
+            <Box style={inputContainerStyle(passwordFocused)}>
               <Lock color={passwordFocused ? c.gold : c.muted} size={17} />
-              <TextInput
-                ref={passwordRef}
-                style={{ flex: 1, color: c.text, fontSize: 15, padding: 0 }}
-                placeholder="Min. 8 characters"
-                placeholderTextColor={c.muted}
-                value={password}
-                onChangeText={setPassword}
-                onFocus={() => setPasswordFocused(true)}
-                onBlur={() => setPasswordFocused(false)}
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType="done"
-                onSubmitEditing={handleRegister}
-              />
-              <TouchableOpacity
+              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+                <InputField
+                  ref={passwordRef}
+                  style={{ color: c.text, fontSize: 15, padding: 0 }}
+                  placeholder="Min. 8 characters"
+                  placeholderTextColor={c.muted}
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() => setPasswordFocused(false)}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  onSubmitEditing={handleRegister}
+                />
+              </Input>
+              <Pressable
                 onPress={() => setShowPassword((v) => !v)}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
@@ -260,9 +267,9 @@ export default function RegisterScreen() {
                 ) : (
                   <Eye color={c.muted} size={18} />
                 )}
-              </TouchableOpacity>
-            </View>
-          </View>
+              </Pressable>
+            </Box>
+          </Box>
 
           {/* Password hint */}
           <Text
@@ -277,9 +284,8 @@ export default function RegisterScreen() {
           </Text>
 
           {/* Create Account Button */}
-          <TouchableOpacity
+          <Pressable
             onPress={handleRegister}
-            activeOpacity={0.85}
             disabled={loading}
             style={{
               backgroundColor: c.gold,
@@ -292,7 +298,7 @@ export default function RegisterScreen() {
             }}
           >
             {loading ? (
-              <ActivityIndicator color={isDark ? '#121212' : '#FFFFFF'} />
+              <Spinner color={isDark ? '#121212' : '#FFFFFF'} />
             ) : (
               <Text
                 style={{
@@ -305,20 +311,20 @@ export default function RegisterScreen() {
                 Create Account
               </Text>
             )}
-          </TouchableOpacity>
+          </Pressable>
 
           {/* Login Link */}
-          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
+          <Box style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
             <Text style={{ color: c.muted, fontSize: 14 }}>
               Already have an account?
             </Text>
-            <TouchableOpacity onPress={() => router.back()}>
+            <Pressable onPress={() => router.back()}>
               <Text style={{ color: c.gold, fontSize: 14, fontWeight: '600' }}>
                 Sign In
               </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+            </Pressable>
+          </Box>
+        </Box>
       </ScrollView>
     </KeyboardAvoidingView>
   );

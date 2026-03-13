@@ -1,18 +1,19 @@
 import React, { useState, useRef } from 'react';
 import {
-  View,
-  Text,
   TextInput,
-  TouchableOpacity,
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Sparkles, Eye, EyeOff, Mail, Lock } from 'lucide-react-native';
 
+import { Box } from '@/components/ui/box';
+import { Input, InputField } from '@/components/ui/input';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Spinner } from '@/components/ui/spinner';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/context/auth-context';
@@ -56,7 +57,7 @@ export default function LoginScreen() {
     }
   };
 
-  const inputStyle = (focused: boolean) => ({
+  const inputContainerStyle = (focused: boolean) => ({
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     backgroundColor: c.card,
@@ -80,7 +81,7 @@ export default function LoginScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Hero Section */}
-        <View
+        <Box
           style={{
             backgroundColor: '#0F1628',
             paddingTop: insets.top + 48,
@@ -89,7 +90,7 @@ export default function LoginScreen() {
             gap: 12,
           }}
         >
-          <View
+          <Box
             style={{
               width: 72,
               height: 72,
@@ -102,8 +103,8 @@ export default function LoginScreen() {
             }}
           >
             <Sparkles color={c.gold} size={32} />
-          </View>
-          <View style={{ alignItems: 'center', gap: 6 }}>
+          </Box>
+          <Box style={{ alignItems: 'center', gap: 6 }}>
             <Text
               style={{
                 color: '#FFFFFF',
@@ -117,11 +118,11 @@ export default function LoginScreen() {
             <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>
               Find your inner peace
             </Text>
-          </View>
-        </View>
+          </Box>
+        </Box>
 
         {/* Form Card */}
-        <View
+        <Box
           style={{
             flex: 1,
             backgroundColor: c.background,
@@ -134,7 +135,7 @@ export default function LoginScreen() {
           }}
         >
           {/* Heading */}
-          <View style={{ marginBottom: 28 }}>
+          <Box style={{ marginBottom: 28 }}>
             <Text
               style={{
                 color: c.text,
@@ -149,11 +150,11 @@ export default function LoginScreen() {
             <Text style={{ color: c.muted, fontSize: 14 }}>
               Sign in to continue your journey
             </Text>
-          </View>
+          </Box>
 
           {/* Error */}
           {error ? (
-            <View
+            <Box
               style={{
                 backgroundColor: '#FF444415',
                 borderRadius: 12,
@@ -165,11 +166,11 @@ export default function LoginScreen() {
               }}
             >
               <Text style={{ color: '#FF4444', fontSize: 13 }}>{error}</Text>
-            </View>
+            </Box>
           ) : null}
 
           {/* Email */}
-          <View style={{ marginBottom: 14 }}>
+          <Box style={{ marginBottom: 14 }}>
             <Text
               style={{
                 color: c.text,
@@ -181,27 +182,29 @@ export default function LoginScreen() {
             >
               Email
             </Text>
-            <View style={inputStyle(emailFocused)}>
+            <Box style={inputContainerStyle(emailFocused)}>
               <Mail color={emailFocused ? c.gold : c.muted} size={17} />
-              <TextInput
-                style={{ flex: 1, color: c.text, fontSize: 15, padding: 0 }}
-                placeholder="you@example.com"
-                placeholderTextColor={c.muted}
-                value={email}
-                onChangeText={setEmail}
-                onFocus={() => setEmailFocused(true)}
-                onBlur={() => setEmailFocused(false)}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType="next"
-                onSubmitEditing={() => passwordRef.current?.focus()}
-              />
-            </View>
-          </View>
+              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+                <InputField
+                  style={{ color: c.text, fontSize: 15, padding: 0 }}
+                  placeholder="you@example.com"
+                  placeholderTextColor={c.muted}
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setEmailFocused(true)}
+                  onBlur={() => setEmailFocused(false)}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  onSubmitEditing={() => passwordRef.current?.focus()}
+                />
+              </Input>
+            </Box>
+          </Box>
 
           {/* Password */}
-          <View style={{ marginBottom: 10 }}>
+          <Box style={{ marginBottom: 10 }}>
             <Text
               style={{
                 color: c.text,
@@ -213,24 +216,26 @@ export default function LoginScreen() {
             >
               Password
             </Text>
-            <View style={inputStyle(passwordFocused)}>
+            <Box style={inputContainerStyle(passwordFocused)}>
               <Lock color={passwordFocused ? c.gold : c.muted} size={17} />
-              <TextInput
-                ref={passwordRef}
-                style={{ flex: 1, color: c.text, fontSize: 15, padding: 0 }}
-                placeholder="Your password"
-                placeholderTextColor={c.muted}
-                value={password}
-                onChangeText={setPassword}
-                onFocus={() => setPasswordFocused(true)}
-                onBlur={() => setPasswordFocused(false)}
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                autoCorrect={false}
-                returnKeyType="done"
-                onSubmitEditing={handleSignIn}
-              />
-              <TouchableOpacity
+              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+                <InputField
+                  ref={passwordRef}
+                  style={{ color: c.text, fontSize: 15, padding: 0 }}
+                  placeholder="Your password"
+                  placeholderTextColor={c.muted}
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() => setPasswordFocused(false)}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSignIn}
+                />
+              </Input>
+              <Pressable
                 onPress={() => setShowPassword((v) => !v)}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
@@ -239,24 +244,23 @@ export default function LoginScreen() {
                 ) : (
                   <Eye color={c.muted} size={18} />
                 )}
-              </TouchableOpacity>
-            </View>
-          </View>
+              </Pressable>
+            </Box>
+          </Box>
 
           {/* Forgot Password */}
-          <TouchableOpacity
+          <Pressable
             onPress={() => router.push('/(auth)/forgot-password')}
             style={{ alignSelf: 'flex-end', marginBottom: 28 }}
           >
             <Text style={{ color: c.gold, fontSize: 13, fontWeight: '500' }}>
               Forgot password?
             </Text>
-          </TouchableOpacity>
+          </Pressable>
 
           {/* Sign In Button */}
-          <TouchableOpacity
+          <Pressable
             onPress={handleSignIn}
-            activeOpacity={0.85}
             disabled={loading}
             style={{
               backgroundColor: c.gold,
@@ -269,7 +273,7 @@ export default function LoginScreen() {
             }}
           >
             {loading ? (
-              <ActivityIndicator color={isDark ? '#121212' : '#FFFFFF'} />
+              <Spinner color={isDark ? '#121212' : '#FFFFFF'} />
             ) : (
               <Text
                 style={{
@@ -282,20 +286,20 @@ export default function LoginScreen() {
                 Sign In
               </Text>
             )}
-          </TouchableOpacity>
+          </Pressable>
 
           {/* Register Link */}
-          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
+          <Box style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
             <Text style={{ color: c.muted, fontSize: 14 }}>
               Don&apos;t have an account?
             </Text>
-            <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
+            <Pressable onPress={() => router.push('/(auth)/register')}>
               <Text style={{ color: c.gold, fontSize: 14, fontWeight: '600' }}>
                 Sign Up
               </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+            </Pressable>
+          </Box>
+        </Box>
       </ScrollView>
     </KeyboardAvoidingView>
   );

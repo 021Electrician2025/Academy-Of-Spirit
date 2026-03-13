@@ -43,5 +43,5 @@ app-example
 /android
 
 #env files
-.env.developement
+.env.development
 .env.production

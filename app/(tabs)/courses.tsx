@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Search, Star, Clock, ChevronRight } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Box } from '@/components/ui/box';
+import { Input, InputField } from '@/components/ui/input';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -78,13 +82,13 @@ export default function CoursesScreen() {
       contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* Header */}
-      <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 16 }}>
+      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 16 }}>
         <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5, marginBottom: 16 }}>
           Courses
         </Text>
 
         {/* Search */}
-        <View
+        <Box
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -98,15 +102,17 @@ export default function CoursesScreen() {
           }}
         >
           <Search color={c.muted} size={17} strokeWidth={2} />
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search courses..."
-            placeholderTextColor={c.muted}
-            style={{ flex: 1, color: c.text, fontSize: 15 }}
-          />
-        </View>
-      </View>
+          <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+            <InputField
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search courses..."
+              placeholderTextColor={c.muted}
+              style={{ color: c.text, fontSize: 15 }}
+            />
+          </Input>
+        </Box>
+      </Box>
 
       {/* Category Filters */}
       <ScrollView
@@ -117,10 +123,9 @@ export default function CoursesScreen() {
         {CATEGORIES.map((cat) => {
           const isActive = cat === activeCategory;
           return (
-            <TouchableOpacity
+            <Pressable
               key={cat}
               onPress={() => setActiveCategory(cat)}
-              activeOpacity={0.7}
               style={{
                 paddingHorizontal: 16,
                 paddingVertical: 8,
@@ -139,14 +144,14 @@ export default function CoursesScreen() {
               >
                 {cat}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           );
         })}
       </ScrollView>
 
       {/* Featured Course */}
-      <View style={{ marginHorizontal: 24, marginBottom: 28 }}>
-        <View
+      <Box style={{ marginHorizontal: 24, marginBottom: 28 }}>
+        <Box
           style={{
             backgroundColor: FEATURED.bg,
             borderRadius: 24,
@@ -154,7 +159,7 @@ export default function CoursesScreen() {
             gap: 16,
           }}
         >
-          <View
+          <Box
             style={{
               alignSelf: 'flex-start',
               backgroundColor: c.gold,
@@ -166,32 +171,31 @@ export default function CoursesScreen() {
             <Text style={{ color: isDark ? '#121212' : '#211E1F', fontSize: 11, fontWeight: '700' }}>
               FEATURED
             </Text>
-          </View>
+          </Box>
 
-          <View style={{ gap: 6 }}>
+          <Box style={{ gap: 6 }}>
             <Text style={{ color: '#FFFFFF', fontSize: 22, fontWeight: '700', letterSpacing: -0.3 }}>
               {FEATURED.title}
             </Text>
             <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
               with {FEATURED.instructor}
             </Text>
-          </View>
+          </Box>
 
-          <View style={{ flexDirection: 'row', gap: 16 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+          <Box style={{ flexDirection: 'row', gap: 16 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
               <Clock color="rgba(255,255,255,0.5)" size={13} />
               <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{FEATURED.duration}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            </Box>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
               <Star color={c.gold} size={13} fill={c.gold} />
               <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
                 {FEATURED.rating} · {FEATURED.students} students
               </Text>
-            </View>
-          </View>
+            </Box>
+          </Box>
 
-          <TouchableOpacity
-            activeOpacity={0.85}
+          <Pressable
             style={{
               backgroundColor: c.gold,
               borderRadius: 14,
@@ -202,19 +206,18 @@ export default function CoursesScreen() {
             <Text style={{ color: isDark ? '#121212' : '#211E1F', fontSize: 15, fontWeight: '700' }}>
               Start Course
             </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          </Pressable>
+        </Box>
+      </Box>
 
       {/* Course List */}
-      <View style={{ paddingHorizontal: 24, gap: 12 }}>
+      <Box style={{ paddingHorizontal: 24, gap: 12 }}>
         <Text style={{ color: c.text, fontSize: 17, fontWeight: '600', marginBottom: 4 }}>
           All Courses
         </Text>
         {COURSES.map((course, i) => (
-          <TouchableOpacity
+          <Pressable
             key={i}
-            activeOpacity={0.8}
             style={{
               flexDirection: 'row',
               backgroundColor: c.card,
@@ -226,36 +229,36 @@ export default function CoursesScreen() {
             }}
           >
             {/* Color accent strip */}
-            <View style={{ width: 56, backgroundColor: course.tagColor, justifyContent: 'center', alignItems: 'center' }}>
+            <Box style={{ width: 56, backgroundColor: course.tagColor, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 10, fontWeight: '600', textAlign: 'center', paddingHorizontal: 4 }}>
                 {course.tag}
               </Text>
-            </View>
+            </Box>
 
-            <View style={{ flex: 1, padding: 14, gap: 4 }}>
+            <Box style={{ flex: 1, padding: 14, gap: 4 }}>
               <Text style={{ color: c.text, fontSize: 15, fontWeight: '600' }}>{course.title}</Text>
               <Text style={{ color: c.muted, fontSize: 12 }}>{course.instructor}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 6 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 6 }}>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                   <Clock color={c.muted} size={12} />
                   <Text style={{ color: c.muted, fontSize: 12 }}>{course.duration}</Text>
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                </Box>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                   <Star color={c.gold} size={12} fill={c.gold} />
                   <Text style={{ color: c.muted, fontSize: 12 }}>{course.rating}</Text>
-                </View>
-                <View style={{ backgroundColor: c.border, borderRadius: 100, paddingHorizontal: 8, paddingVertical: 2 }}>
+                </Box>
+                <Box style={{ backgroundColor: c.border, borderRadius: 100, paddingHorizontal: 8, paddingVertical: 2 }}>
                   <Text style={{ color: c.muted, fontSize: 11 }}>{course.level}</Text>
-                </View>
-              </View>
-            </View>
+                </Box>
+              </Box>
+            </Box>
 
-            <View style={{ justifyContent: 'center', paddingRight: 14 }}>
+            <Box style={{ justifyContent: 'center', paddingRight: 14 }}>
               <ChevronRight color={c.muted} size={18} />
-            </View>
-          </TouchableOpacity>
+            </Box>
+          </Pressable>
         ))}
-      </View>
+      </Box>
     </ScrollView>
   );
 }

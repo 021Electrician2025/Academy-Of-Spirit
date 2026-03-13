@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Mail, CheckCircle } from 'lucide-react-native';
 
+import { Box } from '@/components/ui/box';
+import { Input, InputField } from '@/components/ui/input';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Spinner } from '@/components/ui/spinner';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/context/auth-context';
@@ -59,7 +59,7 @@ export default function ForgotPasswordScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View
+        <Box
           style={{
             paddingTop: insets.top + 16,
             paddingHorizontal: 24,
@@ -67,7 +67,7 @@ export default function ForgotPasswordScreen() {
             backgroundColor: '#0F1628',
           }}
         >
-          <TouchableOpacity
+          <Pressable
             onPress={() => router.back()}
             style={{
               width: 38,
@@ -80,7 +80,7 @@ export default function ForgotPasswordScreen() {
             }}
           >
             <ArrowLeft color="rgba(255,255,255,0.8)" size={20} />
-          </TouchableOpacity>
+          </Pressable>
           <Text
             style={{
               color: '#FFFFFF',
@@ -95,10 +95,10 @@ export default function ForgotPasswordScreen() {
           <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>
             No worries — we&apos;ll send you reset instructions
           </Text>
-        </View>
+        </Box>
 
         {/* Form */}
-        <View
+        <Box
           style={{
             flex: 1,
             backgroundColor: c.background,
@@ -112,8 +112,8 @@ export default function ForgotPasswordScreen() {
         >
           {sent ? (
             /* Success state */
-            <View style={{ alignItems: 'center', paddingTop: 24, gap: 16 }}>
-              <View
+            <Box style={{ alignItems: 'center', paddingTop: 24, gap: 16 }}>
+              <Box
                 style={{
                   width: 72,
                   height: 72,
@@ -126,7 +126,7 @@ export default function ForgotPasswordScreen() {
                 }}
               >
                 <CheckCircle color={c.gold} size={34} />
-              </View>
+              </Box>
               <Text
                 style={{
                   color: c.text,
@@ -151,9 +151,8 @@ export default function ForgotPasswordScreen() {
                 <Text style={{ color: c.text, fontWeight: '600' }}>{email}</Text>
               </Text>
 
-              <TouchableOpacity
+              <Pressable
                 onPress={() => router.back()}
-                activeOpacity={0.85}
                 style={{
                   backgroundColor: c.gold,
                   borderRadius: 16,
@@ -173,9 +172,9 @@ export default function ForgotPasswordScreen() {
                 >
                   Back to Sign In
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
 
-              <TouchableOpacity
+              <Pressable
                 onPress={() => { setSent(false); setEmail(''); }}
                 style={{ paddingVertical: 8 }}
               >
@@ -183,8 +182,8 @@ export default function ForgotPasswordScreen() {
                   Didn&apos;t receive it?{' '}
                   <Text style={{ color: c.gold, fontWeight: '600' }}>Resend</Text>
                 </Text>
-              </TouchableOpacity>
-            </View>
+              </Pressable>
+            </Box>
           ) : (
             <>
               {/* Instruction */}
@@ -202,7 +201,7 @@ export default function ForgotPasswordScreen() {
 
               {/* Error */}
               {error ? (
-                <View
+                <Box
                   style={{
                     backgroundColor: '#FF444415',
                     borderRadius: 12,
@@ -214,11 +213,11 @@ export default function ForgotPasswordScreen() {
                   }}
                 >
                   <Text style={{ color: '#FF4444', fontSize: 13 }}>{error}</Text>
-                </View>
+                </Box>
               ) : null}
 
               {/* Email Input */}
-              <View style={{ marginBottom: 28 }}>
+              <Box style={{ marginBottom: 28 }}>
                 <Text
                   style={{
                     color: c.text,
@@ -230,7 +229,7 @@ export default function ForgotPasswordScreen() {
                 >
                   Email
                 </Text>
-                <View
+                <Box
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -244,27 +243,28 @@ export default function ForgotPasswordScreen() {
                   }}
                 >
                   <Mail color={emailFocused ? c.gold : c.muted} size={17} />
-                  <TextInput
-                    style={{ flex: 1, color: c.text, fontSize: 15, padding: 0 }}
-                    placeholder="you@example.com"
-                    placeholderTextColor={c.muted}
-                    value={email}
-                    onChangeText={setEmail}
-                    onFocus={() => setEmailFocused(true)}
-                    onBlur={() => setEmailFocused(false)}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="done"
-                    onSubmitEditing={handleSendReset}
-                  />
-                </View>
-              </View>
+                  <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+                    <InputField
+                      style={{ color: c.text, fontSize: 15, padding: 0 }}
+                      placeholder="you@example.com"
+                      placeholderTextColor={c.muted}
+                      value={email}
+                      onChangeText={setEmail}
+                      onFocus={() => setEmailFocused(true)}
+                      onBlur={() => setEmailFocused(false)}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      returnKeyType="done"
+                      onSubmitEditing={handleSendReset}
+                    />
+                  </Input>
+                </Box>
+              </Box>
 
               {/* Send Button */}
-              <TouchableOpacity
+              <Pressable
                 onPress={handleSendReset}
-                activeOpacity={0.85}
                 disabled={loading}
                 style={{
                   backgroundColor: c.gold,
@@ -277,7 +277,7 @@ export default function ForgotPasswordScreen() {
                 }}
               >
                 {loading ? (
-                  <ActivityIndicator color={isDark ? '#121212' : '#FFFFFF'} />
+                  <Spinner color={isDark ? '#121212' : '#FFFFFF'} />
                 ) : (
                   <Text
                     style={{
@@ -290,20 +290,20 @@ export default function ForgotPasswordScreen() {
                     Send Reset Link
                   </Text>
                 )}
-              </TouchableOpacity>
+              </Pressable>
 
               {/* Back to login */}
-              <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
+              <Box style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
                 <Text style={{ color: c.muted, fontSize: 14 }}>Remember it?</Text>
-                <TouchableOpacity onPress={() => router.back()}>
+                <Pressable onPress={() => router.back()}>
                   <Text style={{ color: c.gold, fontSize: 14, fontWeight: '600' }}>
                     Sign In
                   </Text>
-                </TouchableOpacity>
-              </View>
+                </Pressable>
+              </Box>
             </>
           )}
-        </View>
+        </Box>
       </ScrollView>
     </KeyboardAvoidingView>
   );

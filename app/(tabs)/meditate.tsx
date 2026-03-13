@@ -1,7 +1,6 @@
 import { setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus, type AudioStatus } from 'expo-audio';
 import { Clock, Headphones, Pause, Play } from 'lucide-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -12,6 +11,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Box } from '@/components/ui/box';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Spinner } from '@/components/ui/spinner';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import {
@@ -189,17 +193,17 @@ export default function MeditateScreen() {
       contentContainerStyle={{ paddingBottom: 32 }}
     >
       {/* Header */}
-      <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 8 }}>
+      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 8 }}>
         <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5 }}>
           Meditate
         </Text>
         <Text style={{ color: c.muted, fontSize: 14, marginTop: 4 }}>
           Breathe. Be present. Transcend.
         </Text>
-      </View>
+      </Box>
 
       {/* Player Hero Card */}
-      <View
+      <Box
         style={{
           marginHorizontal: 24,
           marginVertical: 12,
@@ -211,7 +215,7 @@ export default function MeditateScreen() {
         }}
       >
         {/* Breathing Circle */}
-        <View style={{ alignItems: 'center', justifyContent: 'center', height: 210 }}>
+        <Box style={{ alignItems: 'center', justifyContent: 'center', height: 210 }}>
           <Animated.View
             style={[
               {
@@ -242,7 +246,7 @@ export default function MeditateScreen() {
             {!selected ? (
               <Headphones color={c.gold} size={30} strokeWidth={1.5} />
             ) : (
-              <View style={{ alignItems: 'center', gap: 4 }}>
+              <Box style={{ alignItems: 'center', gap: 4 }}>
                 <Text
                   style={{
                     color: c.gold,
@@ -257,14 +261,14 @@ export default function MeditateScreen() {
                 <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>
                   {formatTime(status.currentTime)} / {formatTime(status.duration || selected.duration_seconds)}
                 </Text>
-              </View>
+              </Box>
             )}
           </Animated.View>
-        </View>
+        </Box>
 
         {/* Track Info */}
         {selected ? (
-          <View style={{ alignItems: 'center', gap: 4, width: '100%' }}>
+          <Box style={{ alignItems: 'center', gap: 4, width: '100%' }}>
             <Text
               style={{ color: '#FFFFFF', fontSize: 17, fontWeight: '700', textAlign: 'center' }}
               numberOfLines={1}
@@ -279,7 +283,7 @@ export default function MeditateScreen() {
                 {selected.description}
               </Text>
             )}
-          </View>
+          </Box>
         ) : (
           <Text style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, textAlign: 'center' }}>
             Select a session below to begin
@@ -287,7 +291,7 @@ export default function MeditateScreen() {
         )}
 
         {/* Progress Bar */}
-        <View
+        <Box
           style={{
             width: '100%',
             height: 3,
@@ -295,7 +299,7 @@ export default function MeditateScreen() {
             borderRadius: 2,
           }}
         >
-          <View
+          <Box
             style={{
               width: `${progress * 100}%`,
               height: '100%',
@@ -303,13 +307,12 @@ export default function MeditateScreen() {
               borderRadius: 2,
             }}
           />
-        </View>
+        </Box>
 
         {/* Play/Pause Button */}
-        <TouchableOpacity
+        <Pressable
           onPress={togglePlay}
           disabled={!selected}
-          activeOpacity={0.85}
           style={{
             width: 64,
             height: 64,
@@ -332,17 +335,17 @@ export default function MeditateScreen() {
               fill={selected ? (isDark ? '#121212' : '#211E1F') : 'rgba(255,255,255,0.25)'}
             />
           )}
-        </TouchableOpacity>
-      </View>
+        </Pressable>
+      </Box>
 
       {/* Sessions List */}
-      <View style={{ paddingHorizontal: 24, marginTop: 8 }}>
+      <Box style={{ paddingHorizontal: 24, marginTop: 8 }}>
         <Text style={{ color: c.text, fontSize: 17, fontWeight: '700', marginBottom: 12 }}>
           Sessions
         </Text>
 
         {loading ? (
-          <ActivityIndicator color={c.gold} style={{ marginTop: 32 }} />
+          <Spinner color={c.gold} style={{ marginTop: 32 }} />
         ) : error ? (
           <Text style={{ color: '#E57373', fontSize: 14, textAlign: 'center', marginTop: 32 }}>
             {error}
@@ -352,14 +355,13 @@ export default function MeditateScreen() {
             No meditations available yet.
           </Text>
         ) : (
-          <View style={{ gap: 10 }}>
+          <Box style={{ gap: 10 }}>
             {meditations.map((med) => {
               const isActive = selected?.id === med.id;
               return (
-                <TouchableOpacity
+                <Pressable
                   key={med.id}
                   onPress={() => selectMeditation(med)}
-                  activeOpacity={0.7}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -372,7 +374,7 @@ export default function MeditateScreen() {
                   }}
                 >
                   {/* Icon */}
-                  <View
+                  <Box
                     style={{
                       width: 40,
                       height: 40,
@@ -395,10 +397,10 @@ export default function MeditateScreen() {
                         fill={isActive ? (isDark ? '#121212' : '#211E1F') : c.muted}
                       />
                     )}
-                  </View>
+                  </Box>
 
                   {/* Title + description */}
-                  <View style={{ flex: 1, gap: 2 }}>
+                  <Box style={{ flex: 1, gap: 2 }}>
                     <Text
                       style={{
                         color: isActive ? c.gold : c.text,
@@ -414,21 +416,21 @@ export default function MeditateScreen() {
                         {med.description}
                       </Text>
                     )}
-                  </View>
+                  </Box>
 
                   {/* Duration */}
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                     <Clock color={c.muted} size={12} />
                     <Text style={{ color: c.muted, fontSize: 12 }}>
                       {formatTime(med.duration_seconds)}
                     </Text>
-                  </View>
-                </TouchableOpacity>
+                  </Box>
+                </Pressable>
               );
             })}
-          </View>
+          </Box>
         )}
-      </View>
+      </Box>
     </ScrollView>
   );
 }

@@ -1,8 +1,11 @@
 import { Check, ChevronRight, Flame, Play, Sun } from 'lucide-react-native';
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Box } from '@/components/ui/box';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useAuth } from '@/context/auth-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -53,18 +56,18 @@ export default function HomeScreen() {
       contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* Header */}
-      <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 8 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <View style={{ gap: 2 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 8 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <Box style={{ gap: 2 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <Sun color={c.muted} size={14} strokeWidth={2} />
               <Text style={{ color: c.muted, fontSize: 14 }}>Good morning</Text>
-            </View>
+            </Box>
             <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5 }}>
               {displayName}
             </Text>
-          </View>
-          <View
+          </Box>
+          <Box
             style={{
               width: 46,
               height: 46,
@@ -77,22 +80,22 @@ export default function HomeScreen() {
             <Text style={{ color: isDark ? '#121212' : '#FFFFFF', fontSize: 18, fontWeight: '700' }}>
               {avatarLetter}
             </Text>
-          </View>
-        </View>
+          </Box>
+        </Box>
 
         {/* Date & Streak */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
           <Text style={{ color: c.muted, fontSize: 13 }}>{today}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <Flame color={c.gold} size={15} fill={c.gold} />
             <Text style={{ color: c.gold, fontSize: 13, fontWeight: '600' }}>7 day streak</Text>
-          </View>
-        </View>
-      </View>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Today's Practice Hero Card */}
-      <View style={{ marginHorizontal: 24, marginTop: 16, marginBottom: 24 }}>
-        <View
+      <Box style={{ marginHorizontal: 24, marginTop: 16, marginBottom: 24 }}>
+        <Box
           style={{
             height: 220,
             borderRadius: 24,
@@ -102,7 +105,7 @@ export default function HomeScreen() {
             justifyContent: 'space-between',
           }}
         >
-          <View style={{ gap: 6 }}>
+          <Box style={{ gap: 6 }}>
             <Text
               style={{
                 color: c.gold,
@@ -120,10 +123,10 @@ export default function HomeScreen() {
             <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>
               15 min · Guided · Beginner
             </Text>
-          </View>
+          </Box>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View
+          <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box
               style={{
                 backgroundColor: 'rgba(255,255,255,0.1)',
                 borderRadius: 100,
@@ -132,9 +135,8 @@ export default function HomeScreen() {
               }}
             >
               <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>Mindfulness Series</Text>
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.8}
+            </Box>
+            <Pressable
               style={{
                 width: 52,
                 height: 52,
@@ -145,22 +147,21 @@ export default function HomeScreen() {
               }}
             >
               <Play color={isDark ? '#121212' : '#211E1F'} size={18} fill={isDark ? '#121212' : '#211E1F'} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+            </Pressable>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Quick Start */}
-      <View style={{ paddingHorizontal: 24, marginBottom: 24, gap: 14 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Box style={{ paddingHorizontal: 24, marginBottom: 24, gap: 14 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Quick Start</Text>
           <Text style={{ color: c.gold, fontSize: 13, fontWeight: '500' }}>See all</Text>
-        </View>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
+        </Box>
+        <Box style={{ flexDirection: 'row', gap: 10 }}>
           {QUICK_STARTS.map((item, i) => (
-            <TouchableOpacity
+            <Pressable
               key={i}
-              activeOpacity={0.7}
               style={{
                 flex: 1,
                 backgroundColor: c.card,
@@ -174,13 +175,13 @@ export default function HomeScreen() {
             >
               <Text style={{ color: c.gold, fontSize: 17, fontWeight: '700' }}>{item.duration}</Text>
               <Text style={{ color: c.muted, fontSize: 11, marginTop: 4 }}>{item.label}</Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {/* Weekly Progress */}
-      <View
+      <Box
         style={{
           marginHorizontal: 24,
           marginBottom: 24,
@@ -192,14 +193,14 @@ export default function HomeScreen() {
           boxShadow: isDark ? undefined : '0 2px 8px rgba(0,0,0,0.04)',
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <Text style={{ color: c.text, fontSize: 15, fontWeight: '600' }}>Weekly Progress</Text>
           <Text style={{ color: c.muted, fontSize: 12 }}>5 of 7 days</Text>
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        </Box>
+        <Box style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           {STREAK_DAYS.map((day, i) => (
-            <View key={i} style={{ alignItems: 'center', gap: 6 }}>
-              <View
+            <Box key={i} style={{ alignItems: 'center', gap: 6 }}>
+              <Box
                 style={{
                   width: 36,
                   height: 36,
@@ -212,31 +213,30 @@ export default function HomeScreen() {
                 {day.done && (
                   <Check color={isDark ? '#121212' : '#FFFFFF'} size={14} strokeWidth={3} />
                 )}
-              </View>
+              </Box>
               <Text style={{ color: c.muted, fontSize: 11 }}>{day.label}</Text>
-            </View>
+            </Box>
           ))}
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {/* Recommended */}
-      <View style={{ gap: 14, marginBottom: 8 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
+      <Box style={{ gap: 14, marginBottom: 8 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
           <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Recommended</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
             <Text style={{ color: c.gold, fontSize: 13, fontWeight: '500' }}>See all</Text>
             <ChevronRight color={c.gold} size={14} />
-          </View>
-        </View>
+          </Box>
+        </Box>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 24, gap: 12 }}
         >
           {RECOMMENDED.map((course, i) => (
-            <TouchableOpacity
+            <Pressable
               key={i}
-              activeOpacity={0.85}
               style={{
                 width: 158,
                 height: 200,
@@ -253,7 +253,7 @@ export default function HomeScreen() {
               <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '700', lineHeight: 22 }}>
                 {course.title}
               </Text>
-              <View
+              <Box
                 style={{
                   marginTop: 10,
                   alignSelf: 'flex-start',
@@ -264,11 +264,11 @@ export default function HomeScreen() {
                 }}
               >
                 <Text style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11 }}>{course.level}</Text>
-              </View>
-            </TouchableOpacity>
+              </Box>
+            </Pressable>
           ))}
         </ScrollView>
-      </View>
+      </Box>
     </ScrollView>
   );
 }

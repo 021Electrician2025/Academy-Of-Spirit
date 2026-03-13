@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { Users, Clock, Calendar } from 'lucide-react-native';
 import Animated, {
   useSharedValue,
@@ -9,6 +8,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Box } from '@/components/ui/box';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -70,7 +73,7 @@ function PulseDot({ color }: { color: string }) {
   }));
 
   return (
-    <View style={{ width: 12, height: 12, alignItems: 'center', justifyContent: 'center' }}>
+    <Box style={{ width: 12, height: 12, alignItems: 'center', justifyContent: 'center' }}>
       <Animated.View
         style={[
           {
@@ -83,8 +86,8 @@ function PulseDot({ color }: { color: string }) {
           animStyle,
         ]}
       />
-      <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />
-    </View>
+      <Box style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />
+    </Box>
   );
 }
 
@@ -102,18 +105,18 @@ export default function LiveScreen() {
       contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* Header */}
-      <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 20 }}>
+      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 20 }}>
         <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5 }}>
           Live
         </Text>
         <Text style={{ color: c.muted, fontSize: 14, marginTop: 4 }}>
           Join live meditation sessions
         </Text>
-      </View>
+      </Box>
 
       {/* Live Now Card */}
-      <View style={{ marginHorizontal: 24, marginBottom: 28 }}>
-        <View
+      <Box style={{ marginHorizontal: 24, marginBottom: 28 }}>
+        <Box
           style={{
             backgroundColor: '#0F1628',
             borderRadius: 24,
@@ -122,39 +125,38 @@ export default function LiveScreen() {
           }}
         >
           {/* Live badge */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 20 }}>
             <PulseDot color="#FF4444" />
             <Text style={{ color: '#FF4444', fontSize: 12, fontWeight: '700', letterSpacing: 1.5 }}>
               LIVE NOW
             </Text>
-          </View>
+          </Box>
 
-          <View style={{ gap: 6, marginBottom: 20 }}>
+          <Box style={{ gap: 6, marginBottom: 20 }}>
             <Text style={{ color: '#FFFFFF', fontSize: 22, fontWeight: '700', letterSpacing: -0.3 }}>
               {LIVE_SESSION.title}
             </Text>
             <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>
               with {LIVE_SESSION.host}
             </Text>
-          </View>
+          </Box>
 
-          <View style={{ flexDirection: 'row', gap: 20, marginBottom: 24 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <Box style={{ flexDirection: 'row', gap: 20, marginBottom: 24 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <Users color="rgba(255,255,255,0.5)" size={14} />
               <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
                 {LIVE_SESSION.viewers} watching
               </Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            </Box>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <Clock color="rgba(255,255,255,0.5)" size={14} />
               <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
                 {LIVE_SESSION.duration}
               </Text>
-            </View>
-          </View>
+            </Box>
+          </Box>
 
-          <TouchableOpacity
-            activeOpacity={0.85}
+          <Pressable
             style={{
               backgroundColor: '#FF4444',
               borderRadius: 14,
@@ -165,21 +167,20 @@ export default function LiveScreen() {
             <Text style={{ color: '#FFFFFF', fontSize: 15, fontWeight: '700' }}>
               Join Session
             </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          </Pressable>
+        </Box>
+      </Box>
 
       {/* Upcoming */}
-      <View style={{ paddingHorizontal: 24, gap: 12 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+      <Box style={{ paddingHorizontal: 24, gap: 12 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 }}>
           <Calendar color={c.muted} size={16} />
           <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Upcoming Sessions</Text>
-        </View>
+        </Box>
 
         {UPCOMING.map((session, i) => (
-          <TouchableOpacity
+          <Pressable
             key={i}
-            activeOpacity={0.8}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -192,7 +193,7 @@ export default function LiveScreen() {
             }}
           >
             {/* Time column */}
-            <View
+            <Box
               style={{
                 width: 70,
                 paddingVertical: 18,
@@ -204,19 +205,18 @@ export default function LiveScreen() {
             >
               <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10 }}>{session.day}</Text>
               <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '700' }}>{session.time}</Text>
-            </View>
+            </Box>
 
-            <View style={{ flex: 1, padding: 14, gap: 4 }}>
+            <Box style={{ flex: 1, padding: 14, gap: 4 }}>
               <Text style={{ color: c.text, fontSize: 15, fontWeight: '600' }}>{session.title}</Text>
               <Text style={{ color: c.muted, fontSize: 13 }}>{session.host}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
+              <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 }}>
                 <Clock color={c.muted} size={12} />
                 <Text style={{ color: c.muted, fontSize: 12 }}>{session.duration}</Text>
-              </View>
-            </View>
+              </Box>
+            </Box>
 
-            <TouchableOpacity
-              activeOpacity={0.8}
+            <Pressable
               style={{
                 marginRight: 14,
                 backgroundColor: c.gold + '22',
@@ -226,10 +226,10 @@ export default function LiveScreen() {
               }}
             >
               <Text style={{ color: c.gold, fontSize: 12, fontWeight: '600' }}>Remind</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
+            </Pressable>
+          </Pressable>
         ))}
-      </View>
+      </Box>
     </ScrollView>
   );
 }

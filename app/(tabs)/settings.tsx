@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, Switch, Alert } from 'react-native';
+import { Switch } from 'react-native';
 import { router } from 'expo-router';
 import {
   Bell,
@@ -17,6 +17,18 @@ import {
 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import {
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from '@/components/ui/alert-dialog';
+import { Box } from '@/components/ui/box';
+import { Pressable } from '@/components/ui/pressable';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Text } from '@/components/ui/text';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAppTheme, type ThemePreference } from '@/context/theme-context';
@@ -36,9 +48,8 @@ type SettingRowProps = {
 
 function SettingRow({ icon, iconBg, label, value, onPress, rightElement, destructive, c, isDark }: SettingRowProps) {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
-      activeOpacity={0.7}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -47,7 +58,7 @@ function SettingRow({ icon, iconBg, label, value, onPress, rightElement, destruc
         gap: 14,
       }}
     >
-      <View
+      <Box
         style={{
           width: 36,
           height: 36,
@@ -58,7 +69,7 @@ function SettingRow({ icon, iconBg, label, value, onPress, rightElement, destruc
         }}
       >
         {icon}
-      </View>
+      </Box>
       <Text
         style={{
           flex: 1,
@@ -74,13 +85,13 @@ function SettingRow({ icon, iconBg, label, value, onPress, rightElement, destruc
       {!rightElement && !value && (
         <ChevronRight color={c.muted} size={16} />
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
 function Divider({ c }: { c: (typeof Colors)['light'] }) {
   return (
-    <View style={{ height: 1, backgroundColor: c.border, marginLeft: 66 }} />
+    <Box style={{ height: 1, backgroundColor: c.border, marginLeft: 66 }} />
   );
 }
 
@@ -92,6 +103,7 @@ export default function SettingsScreen() {
 
   const [notifications, setNotifications] = useState(true);
   const [sounds, setSounds] = useState(true);
+  const [signOutDialogOpen, setSignOutDialogOpen] = useState(false);
   const { preference, setTheme } = useAppTheme();
   const { user, signOut } = useAuth();
 
@@ -100,17 +112,7 @@ export default function SettingsScreen() {
   const avatarLetter = displayName.charAt(0).toUpperCase();
 
   const handleSignOut = () => {
-    Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Sign Out',
-        style: 'destructive',
-        onPress: () => {
-          signOut();
-          router.replace('/(auth)/login');
-        },
-      },
-    ]);
+    setSignOutDialogOpen(true);
   };
 
   const cardStyle = {
@@ -132,14 +134,14 @@ export default function SettingsScreen() {
       contentContainerStyle={{ paddingBottom: 32 }}
     >
       {/* Header */}
-      <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 24 }}>
+      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 24 }}>
         <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5 }}>
           Settings
         </Text>
-      </View>
+      </Box>
 
       {/* Profile Card */}
-      <View
+      <Box
         style={{
           marginHorizontal: 24,
           marginBottom: 24,
@@ -151,7 +153,7 @@ export default function SettingsScreen() {
           gap: 16,
         }}
       >
-        <View
+        <Box
           style={{
             width: 60,
             height: 60,
@@ -164,14 +166,14 @@ export default function SettingsScreen() {
           <Text style={{ color: isDark ? '#121212' : '#FFFFFF', fontSize: 24, fontWeight: '700' }}>
             {avatarLetter}
           </Text>
-        </View>
-        <View style={{ flex: 1 }}>
+        </Box>
+        <Box style={{ flex: 1 }}>
           <Text style={{ color: '#FFFFFF', fontSize: 18, fontWeight: '700' }}>{displayName}</Text>
           <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 2 }}>
             {displayEmail}
           </Text>
-        </View>
-        <View
+        </Box>
+        <Box
           style={{
             backgroundColor: c.gold + '25',
             borderRadius: 100,
@@ -182,11 +184,11 @@ export default function SettingsScreen() {
           }}
         >
           <Text style={{ color: c.gold, fontSize: 12, fontWeight: '600' }}>Pro</Text>
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {/* Stats */}
-      <View
+      <Box
         style={{
           flexDirection: 'row',
           marginHorizontal: 24,
@@ -199,7 +201,7 @@ export default function SettingsScreen() {
           { value: '43', label: 'Sessions' },
           { value: '12h', label: 'Total Time' },
         ].map((stat, i) => (
-          <View
+          <Box
             key={i}
             style={{
               flex: 1,
@@ -214,15 +216,15 @@ export default function SettingsScreen() {
           >
             <Text style={{ color: c.gold, fontSize: 22, fontWeight: '700' }}>{stat.value}</Text>
             <Text style={{ color: c.muted, fontSize: 11, marginTop: 2 }}>{stat.label}</Text>
-          </View>
+          </Box>
         ))}
-      </View>
+      </Box>
 
       {/* Preferences */}
       <Text style={{ color: c.muted, fontSize: 12, fontWeight: '600', letterSpacing: 1, paddingHorizontal: 28, marginBottom: 8, textTransform: 'uppercase' }}>
         Preferences
       </Text>
-      <View style={cardStyle}>
+      <Box style={cardStyle}>
         <SettingRow
           icon={<Bell color="#FFFFFF" size={17} />}
           iconBg="#5B8DEF"
@@ -256,9 +258,9 @@ export default function SettingsScreen() {
         />
         <Divider c={c} />
         {/* Theme Picker */}
-        <View style={{ paddingHorizontal: 16, paddingVertical: 14, gap: 12 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-            <View
+        <Box style={{ paddingHorizontal: 16, paddingVertical: 14, gap: 12 }}>
+          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+            <Box
               style={{
                 width: 36,
                 height: 36,
@@ -269,10 +271,10 @@ export default function SettingsScreen() {
               }}
             >
               <Moon color="#FFFFFF" size={17} />
-            </View>
+            </Box>
             <Text style={{ flex: 1, color: c.text, fontSize: 15 }}>Appearance</Text>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
+          </Box>
+          <Box style={{ flexDirection: 'row', gap: 8 }}>
             {(
               [
                 { value: 'system', label: 'System', Icon: Smartphone },
@@ -282,10 +284,9 @@ export default function SettingsScreen() {
             ).map(({ value, label, Icon }) => {
               const isActive = preference === value;
               return (
-                <TouchableOpacity
+                <Pressable
                   key={value}
                   onPress={() => setTheme(value)}
-                  activeOpacity={0.7}
                   style={{
                     flex: 1,
                     flexDirection: 'column',
@@ -308,11 +309,11 @@ export default function SettingsScreen() {
                   >
                     {label}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               );
             })}
-          </View>
-        </View>
+          </Box>
+        </Box>
         <Divider c={c} />
         <SettingRow
           icon={<Globe color="#FFFFFF" size={17} />}
@@ -323,13 +324,13 @@ export default function SettingsScreen() {
           isDark={isDark}
           onPress={() => {}}
         />
-      </View>
+      </Box>
 
       {/* Content */}
       <Text style={{ color: c.muted, fontSize: 12, fontWeight: '600', letterSpacing: 1, paddingHorizontal: 28, marginBottom: 8, textTransform: 'uppercase' }}>
         Content
       </Text>
-      <View style={cardStyle}>
+      <Box style={cardStyle}>
         <SettingRow
           icon={<Download color="#FFFFFF" size={17} />}
           iconBg="#14B8A6"
@@ -348,13 +349,13 @@ export default function SettingsScreen() {
           isDark={isDark}
           onPress={() => {}}
         />
-      </View>
+      </Box>
 
       {/* Support */}
       <Text style={{ color: c.muted, fontSize: 12, fontWeight: '600', letterSpacing: 1, paddingHorizontal: 28, marginBottom: 8, textTransform: 'uppercase' }}>
         Support
       </Text>
-      <View style={cardStyle}>
+      <Box style={cardStyle}>
         <SettingRow
           icon={<HelpCircle color="#FFFFFF" size={17} />}
           iconBg="#3B82F6"
@@ -372,10 +373,10 @@ export default function SettingsScreen() {
           isDark={isDark}
           onPress={() => {}}
         />
-      </View>
+      </Box>
 
       {/* Sign Out */}
-      <View style={cardStyle}>
+      <Box style={cardStyle}>
         <SettingRow
           icon={<LogOut color="#FF4444" size={17} />}
           iconBg="#FF444420"
@@ -384,13 +385,43 @@ export default function SettingsScreen() {
           c={c}
           isDark={isDark}
           onPress={handleSignOut}
-          rightElement={<View />}
+          rightElement={<Box />}
         />
-      </View>
+      </Box>
 
       <Text style={{ textAlign: 'center', color: c.muted, fontSize: 12, marginTop: 8 }}>
         Academy of Spirit v1.0.0
       </Text>
+
+      <AlertDialog isOpen={signOutDialogOpen} onClose={() => setSignOutDialogOpen(false)}>
+        <AlertDialogBackdrop />
+        <AlertDialogContent style={{ backgroundColor: c.card }}>
+          <AlertDialogHeader>
+            <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Sign Out</Text>
+          </AlertDialogHeader>
+          <AlertDialogBody>
+            <Text style={{ color: c.muted, fontSize: 14 }}>Are you sure you want to sign out?</Text>
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Pressable
+              onPress={() => setSignOutDialogOpen(false)}
+              style={{ paddingHorizontal: 16, paddingVertical: 10 }}
+            >
+              <Text style={{ color: c.muted, fontSize: 15 }}>Cancel</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setSignOutDialogOpen(false);
+                signOut();
+                router.replace('/(auth)/login');
+              }}
+              style={{ paddingHorizontal: 16, paddingVertical: 10 }}
+            >
+              <Text style={{ color: '#FF4444', fontSize: 15, fontWeight: '600' }}>Sign Out</Text>
+            </Pressable>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </ScrollView>
   );
 }
