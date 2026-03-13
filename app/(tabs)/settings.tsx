@@ -1,36 +1,26 @@
 import React, { useState } from 'react';
-import { Switch } from 'react-native';
 import { router } from 'expo-router';
 import {
-  Bell,
-  Moon,
-  Sun,
-  Smartphone,
-  Volume2,
-  Globe,
-  Shield,
-  HelpCircle,
-  ChevronRight,
-  LogOut,
-  Download,
-  Star,
+  Bell, Moon, Sun, Smartphone, Volume2, Globe, Shield,
+  HelpCircle, ChevronRight, LogOut, Download, Star,
 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
-  AlertDialog,
-  AlertDialogBackdrop,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
+  AlertDialog, AlertDialogBackdrop, AlertDialogBody,
+  AlertDialogContent, AlertDialogFooter, AlertDialogHeader,
 } from '@/components/ui/alert-dialog';
 import { Box } from '@/components/ui/box';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Divider } from '@/components/ui/divider';
+import { HStack } from '@/components/ui/hstack';
+import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
+import { Switch } from '@/components/ui/switch';
 import { Text } from '@/components/ui/text';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Heading } from '@/components/ui/heading';
+import { VStack } from '@/components/ui/vstack';
 import { useAppTheme, type ThemePreference } from '@/context/theme-context';
 import { useAuth } from '@/context/auth-context';
 
@@ -42,64 +32,37 @@ type SettingRowProps = {
   onPress?: () => void;
   rightElement?: React.ReactNode;
   destructive?: boolean;
-  c: (typeof Colors)['light'];
-  isDark: boolean;
 };
 
-function SettingRow({ icon, iconBg, label, value, onPress, rightElement, destructive, c, isDark }: SettingRowProps) {
+function SettingRow({ icon, iconBg, label, value, onPress, rightElement, destructive }: SettingRowProps) {
   return (
     <Pressable
       onPress={onPress}
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-        gap: 14,
-      }}
+      className="flex-row items-center px-4 py-3.5"
+      style={{ gap: 14 }}
     >
       <Box
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 10,
-          backgroundColor: iconBg,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        className="w-9 h-9 rounded-xl items-center justify-center"
+        style={{ backgroundColor: iconBg }}
       >
         {icon}
       </Box>
-      <Text
-        style={{
-          flex: 1,
-          color: destructive ? '#FF4444' : c.text,
-          fontSize: 15,
-          fontWeight: '400',
-        }}
-      >
+      <Text className={`flex-1 text-sm ${destructive ? 'text-destructive' : 'text-foreground'}`}>
         {label}
       </Text>
-      {value && <Text style={{ color: c.muted, fontSize: 14 }}>{value}</Text>}
+      {value && <Text size="sm" className="text-muted-foreground">{value}</Text>}
       {rightElement}
       {!rightElement && !value && (
-        <ChevronRight color={c.muted} size={16} />
+        <Icon as={ChevronRight} className="text-muted-foreground" size="sm" />
       )}
     </Pressable>
   );
 }
 
-function Divider({ c }: { c: (typeof Colors)['light'] }) {
-  return (
-    <Box style={{ height: 1, backgroundColor: c.border, marginLeft: 66 }} />
-  );
-}
+const cardClassName = 'bg-card rounded-[20px] border border-border overflow-hidden mx-6 mb-4';
 
 export default function SettingsScreen() {
-  const colorScheme = useColorScheme();
-  const c = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const isDark = colorScheme === 'dark';
 
   const [notifications, setNotifications] = useState(true);
   const [sounds, setSounds] = useState(true);
@@ -111,91 +74,34 @@ export default function SettingsScreen() {
   const displayEmail = user?.email || '';
   const avatarLetter = displayName.charAt(0).toUpperCase();
 
-  const handleSignOut = () => {
-    setSignOutDialogOpen(true);
-  };
-
-  const cardStyle = {
-    backgroundColor: c.card,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: c.border,
-    overflow: 'hidden' as const,
-    marginHorizontal: 24,
-    marginBottom: 16,
-    boxShadow: isDark ? undefined : '0 2px 8px rgba(0,0,0,0.04)',
-  };
-
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: c.background }}
+      className="flex-1 bg-background"
       contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 32 }}
     >
       {/* Header */}
-      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 24 }}>
-        <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5 }}>
-          Settings
-        </Text>
+      <Box className="px-6 pb-6" style={{ paddingTop: insets.top + 16 }}>
+        <Heading size="2xl" className="text-foreground tracking-tight">Settings</Heading>
       </Box>
 
       {/* Profile Card */}
-      <Box
-        style={{
-          marginHorizontal: 24,
-          marginBottom: 24,
-          backgroundColor: '#0F1628',
-          borderRadius: 24,
-          padding: 24,
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 16,
-        }}
-      >
-        <Box
-          style={{
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: c.gold,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Text style={{ color: isDark ? '#121212' : '#FFFFFF', fontSize: 24, fontWeight: '700' }}>
-            {avatarLetter}
-          </Text>
+      <Box className="mx-6 mb-6 bg-hero rounded-3xl p-6 flex-row items-center" style={{ gap: 16 }}>
+        <Box className="w-[60px] h-[60px] rounded-full bg-primary items-center justify-center">
+          <Text size="2xl" bold className="text-primary-foreground">{avatarLetter}</Text>
         </Box>
-        <Box style={{ flex: 1 }}>
-          <Text style={{ color: '#FFFFFF', fontSize: 18, fontWeight: '700' }}>{displayName}</Text>
-          <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 2 }}>
-            {displayEmail}
-          </Text>
-        </Box>
-        <Box
-          style={{
-            backgroundColor: c.gold + '25',
-            borderRadius: 100,
-            paddingHorizontal: 12,
-            paddingVertical: 5,
-            borderWidth: 1,
-            borderColor: c.gold + '50',
-          }}
-        >
-          <Text style={{ color: c.gold, fontSize: 12, fontWeight: '600' }}>Pro</Text>
+        <VStack space="xs" className="flex-1">
+          <Text size="lg" bold className="text-white">{displayName}</Text>
+          <Text size="xs" className="text-white/50">{displayEmail}</Text>
+        </VStack>
+        <Box className="bg-primary/25 rounded-full px-3 py-1 border border-primary/50">
+          <Text size="xs" bold className="text-primary">Pro</Text>
         </Box>
       </Box>
 
       {/* Stats */}
-      <Box
-        style={{
-          flexDirection: 'row',
-          marginHorizontal: 24,
-          marginBottom: 24,
-          gap: 10,
-        }}
-      >
+      <HStack space="sm" className="mx-6 mb-6">
         {[
           { value: '7', label: 'Day Streak' },
           { value: '43', label: 'Sessions' },
@@ -203,222 +109,167 @@ export default function SettingsScreen() {
         ].map((stat, i) => (
           <Box
             key={i}
-            style={{
-              flex: 1,
-              backgroundColor: c.card,
-              borderRadius: 16,
-              padding: 14,
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: c.border,
-              boxShadow: isDark ? undefined : '0 2px 6px rgba(0,0,0,0.04)',
-            }}
+            className="flex-1 bg-card rounded-2xl p-3.5 items-center border border-border"
           >
-            <Text style={{ color: c.gold, fontSize: 22, fontWeight: '700' }}>{stat.value}</Text>
-            <Text style={{ color: c.muted, fontSize: 11, marginTop: 2 }}>{stat.label}</Text>
+            <Text size="xl" bold className="text-primary">{stat.value}</Text>
+            <Text size="2xs" className="text-muted-foreground mt-0.5">{stat.label}</Text>
           </Box>
         ))}
-      </Box>
+      </HStack>
 
       {/* Preferences */}
-      <Text style={{ color: c.muted, fontSize: 12, fontWeight: '600', letterSpacing: 1, paddingHorizontal: 28, marginBottom: 8, textTransform: 'uppercase' }}>
+      <Text size="xs" bold className="text-muted-foreground tracking-widest uppercase px-7 mb-2">
         Preferences
       </Text>
-      <Box style={cardStyle}>
+      <Box className={cardClassName}>
         <SettingRow
-          icon={<Bell color="#FFFFFF" size={17} />}
+          icon={<Icon as={Bell} className="text-white" size="sm" />}
           iconBg="#5B8DEF"
           label="Notifications"
-          c={c}
-          isDark={isDark}
           rightElement={
             <Switch
               value={notifications}
               onValueChange={setNotifications}
-              trackColor={{ false: c.border, true: c.gold }}
-              thumbColor="#FFFFFF"
             />
           }
         />
-        <Divider c={c} />
+        <Divider className="ml-[66px]" />
         <SettingRow
-          icon={<Volume2 color="#FFFFFF" size={17} />}
+          icon={<Icon as={Volume2} className="text-white" size="sm" />}
           iconBg="#5BC85B"
           label="Ambient Sounds"
-          c={c}
-          isDark={isDark}
           rightElement={
             <Switch
               value={sounds}
               onValueChange={setSounds}
-              trackColor={{ false: c.border, true: c.gold }}
-              thumbColor="#FFFFFF"
             />
           }
         />
-        <Divider c={c} />
+        <Divider className="ml-[66px]" />
+
         {/* Theme Picker */}
-        <Box style={{ paddingHorizontal: 16, paddingVertical: 14, gap: 12 }}>
-          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-            <Box
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                backgroundColor: '#8B5CF6',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Moon color="#FFFFFF" size={17} />
+        <Box className="px-4 py-3.5" style={{ gap: 12 }}>
+          <HStack className="items-center" style={{ gap: 14 }}>
+            <Box className="w-9 h-9 rounded-xl items-center justify-center" style={{ backgroundColor: '#8B5CF6' }}>
+              <Icon as={Moon} className="text-white" size="sm" />
             </Box>
-            <Text style={{ flex: 1, color: c.text, fontSize: 15 }}>Appearance</Text>
-          </Box>
-          <Box style={{ flexDirection: 'row', gap: 8 }}>
+            <Text className="flex-1 text-sm text-foreground">Appearance</Text>
+          </HStack>
+          <HStack space="sm">
             {(
               [
                 { value: 'system', label: 'System', Icon: Smartphone },
                 { value: 'light', label: 'Light', Icon: Sun },
                 { value: 'dark', label: 'Dark', Icon: Moon },
-              ] as { value: ThemePreference; label: string; Icon: React.ComponentType<{ color: string; size: number }> }[]
-            ).map(({ value, label, Icon }) => {
+              ] as { value: ThemePreference; label: string; Icon: React.ComponentType<any> }[]
+            ).map(({ value, label, Icon: ThemeIcon }) => {
               const isActive = preference === value;
               return (
                 <Pressable
                   key={value}
                   onPress={() => setTheme(value)}
-                  style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    paddingVertical: 12,
-                    gap: 6,
-                    borderRadius: 14,
-                    borderWidth: 2,
-                    borderColor: isActive ? c.gold : c.border,
-                    backgroundColor: isActive ? c.gold + '15' : 'transparent',
-                  }}
+                  className={`flex-1 flex-col items-center py-3 rounded-2xl border-2 ${isActive ? 'border-primary bg-primary/15' : 'border-border bg-transparent'}`}
+                  style={{ gap: 6 }}
                 >
-                  <Icon color={isActive ? c.gold : c.muted} size={18} />
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: '600',
-                      color: isActive ? c.gold : c.muted,
-                    }}
-                  >
+                  <Icon as={ThemeIcon} className={isActive ? 'text-primary' : 'text-muted-foreground'} size="sm" />
+                  <Text size="xs" bold className={isActive ? 'text-primary' : 'text-muted-foreground'}>
                     {label}
                   </Text>
                 </Pressable>
               );
             })}
-          </Box>
+          </HStack>
         </Box>
-        <Divider c={c} />
+        <Divider className="ml-[66px]" />
         <SettingRow
-          icon={<Globe color="#FFFFFF" size={17} />}
+          icon={<Icon as={Globe} className="text-white" size="sm" />}
           iconBg="#F59E0B"
           label="Language"
           value="English"
-          c={c}
-          isDark={isDark}
           onPress={() => {}}
         />
       </Box>
 
       {/* Content */}
-      <Text style={{ color: c.muted, fontSize: 12, fontWeight: '600', letterSpacing: 1, paddingHorizontal: 28, marginBottom: 8, textTransform: 'uppercase' }}>
+      <Text size="xs" bold className="text-muted-foreground tracking-widest uppercase px-7 mb-2">
         Content
       </Text>
-      <Box style={cardStyle}>
+      <Box className={cardClassName}>
         <SettingRow
-          icon={<Download color="#FFFFFF" size={17} />}
+          icon={<Icon as={Download} className="text-white" size="sm" />}
           iconBg="#14B8A6"
           label="Downloaded Sessions"
           value="3 files"
-          c={c}
-          isDark={isDark}
           onPress={() => {}}
         />
-        <Divider c={c} />
+        <Divider className="ml-[66px]" />
         <SettingRow
-          icon={<Star color="#FFFFFF" size={17} />}
-          iconBg={c.gold}
+          icon={<Icon as={Star} className="text-white" size="sm" />}
+          iconBg="rgb(var(--primary))"
           label="Rate the App"
-          c={c}
-          isDark={isDark}
           onPress={() => {}}
         />
       </Box>
 
       {/* Support */}
-      <Text style={{ color: c.muted, fontSize: 12, fontWeight: '600', letterSpacing: 1, paddingHorizontal: 28, marginBottom: 8, textTransform: 'uppercase' }}>
+      <Text size="xs" bold className="text-muted-foreground tracking-widest uppercase px-7 mb-2">
         Support
       </Text>
-      <Box style={cardStyle}>
+      <Box className={cardClassName}>
         <SettingRow
-          icon={<HelpCircle color="#FFFFFF" size={17} />}
+          icon={<Icon as={HelpCircle} className="text-white" size="sm" />}
           iconBg="#3B82F6"
           label="Help & FAQ"
-          c={c}
-          isDark={isDark}
           onPress={() => {}}
         />
-        <Divider c={c} />
+        <Divider className="ml-[66px]" />
         <SettingRow
-          icon={<Shield color="#FFFFFF" size={17} />}
+          icon={<Icon as={Shield} className="text-white" size="sm" />}
           iconBg="#6B7280"
           label="Privacy Policy"
-          c={c}
-          isDark={isDark}
           onPress={() => {}}
         />
       </Box>
 
       {/* Sign Out */}
-      <Box style={cardStyle}>
+      <Box className={cardClassName}>
         <SettingRow
-          icon={<LogOut color="#FF4444" size={17} />}
-          iconBg="#FF444420"
+          icon={<Icon as={LogOut} className="text-destructive" size="sm" />}
+          iconBg="rgba(239,68,68,0.13)"
           label="Sign Out"
           destructive
-          c={c}
-          isDark={isDark}
-          onPress={handleSignOut}
+          onPress={() => setSignOutDialogOpen(true)}
           rightElement={<Box />}
         />
       </Box>
 
-      <Text style={{ textAlign: 'center', color: c.muted, fontSize: 12, marginTop: 8 }}>
+      <Text size="xs" className="text-muted-foreground text-center mt-2">
         Academy of Spirit v1.0.0
       </Text>
 
       <AlertDialog isOpen={signOutDialogOpen} onClose={() => setSignOutDialogOpen(false)}>
         <AlertDialogBackdrop />
-        <AlertDialogContent style={{ backgroundColor: c.card }}>
+        <AlertDialogContent>
           <AlertDialogHeader>
-            <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Sign Out</Text>
+            <Text size="lg" bold className="text-foreground">Sign Out</Text>
           </AlertDialogHeader>
           <AlertDialogBody>
-            <Text style={{ color: c.muted, fontSize: 14 }}>Are you sure you want to sign out?</Text>
+            <Text size="sm" className="text-muted-foreground">Are you sure you want to sign out?</Text>
           </AlertDialogBody>
           <AlertDialogFooter>
-            <Pressable
-              onPress={() => setSignOutDialogOpen(false)}
-              style={{ paddingHorizontal: 16, paddingVertical: 10 }}
-            >
-              <Text style={{ color: c.muted, fontSize: 15 }}>Cancel</Text>
-            </Pressable>
-            <Pressable
+            <Button variant="ghost" onPress={() => setSignOutDialogOpen(false)}>
+              <ButtonText className="text-muted-foreground">Cancel</ButtonText>
+            </Button>
+            <Button
+              variant="destructive"
               onPress={() => {
                 setSignOutDialogOpen(false);
                 signOut();
                 router.replace('/(auth)/login');
               }}
-              style={{ paddingHorizontal: 16, paddingVertical: 10 }}
             >
-              <Text style={{ color: '#FF4444', fontSize: 15, fontWeight: '600' }}>Sign Out</Text>
-            </Pressable>
+              <ButtonText>Sign Out</ButtonText>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

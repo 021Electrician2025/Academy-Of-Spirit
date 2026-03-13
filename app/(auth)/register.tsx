@@ -1,41 +1,34 @@
 import React, { useState, useRef } from 'react';
-import {
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { Platform } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Eye, EyeOff, Mail, Lock, User } from 'lucide-react-native';
 
 import { Box } from '@/components/ui/box';
-import { Input, InputField } from '@/components/ui/input';
+import { VStack } from '@/components/ui/vstack';
+import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
+import { Heading } from '@/components/ui/heading';
+import { Button, ButtonText, ButtonSpinner } from '@/components/ui/button';
+import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
+import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
-import { Spinner } from '@/components/ui/spinner';
-import { Text } from '@/components/ui/text';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
 import { useAuth } from '@/context/auth-context';
 
 export default function RegisterScreen() {
-  const colorScheme = useColorScheme();
-  const c = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const isDark = colorScheme === 'dark';
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [nameFocused, setNameFocused] = useState(false);
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const emailRef = useRef<TextInput>(null);
-  const passwordRef = useRef<TextInput>(null);
+  const emailRef = useRef<React.ElementRef<typeof InputField>>(null);
+  const passwordRef = useRef<React.ElementRef<typeof InputField>>(null);
   const { signUp } = useAuth();
 
   const handleRegister = async () => {
@@ -66,156 +59,80 @@ export default function RegisterScreen() {
     }
   };
 
-  const inputContainerStyle = (focused: boolean) => ({
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    backgroundColor: c.card,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: focused ? c.gold : c.border,
-    paddingHorizontal: 14,
-    paddingVertical: Platform.OS === 'ios' ? 14 : 10,
-    gap: 10,
-  });
-
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: c.background }}
+      className="flex-1 bg-background"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        style={{ flex: 1 }}
+        className="flex-1"
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
         <Box
-          style={{
-            paddingTop: insets.top + 16,
-            paddingHorizontal: 24,
-            paddingBottom: 32,
-            backgroundColor: '#0F1628',
-          }}
+          className="bg-hero px-6 pb-8"
+          style={{ paddingTop: insets.top + 16 }}
         >
           <Pressable
             onPress={() => router.back()}
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 12,
-              backgroundColor: 'rgba(255,255,255,0.08)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 28,
-            }}
+            className="w-10 h-10 rounded-xl bg-white/8 items-center justify-center mb-7"
           >
-            <ArrowLeft color="rgba(255,255,255,0.8)" size={20} />
+            <Icon as={ArrowLeft} className="text-white/80" size="lg" />
           </Pressable>
-          <Text
-            style={{
-              color: '#FFFFFF',
-              fontSize: 26,
-              fontWeight: '700',
-              letterSpacing: -0.5,
-              marginBottom: 4,
-            }}
-          >
+          <Heading size="2xl" className="text-white tracking-tight mb-1">
             Create Account
-          </Text>
-          <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>
+          </Heading>
+          <Text size="sm" className="text-white/45">
             Join and begin your inner journey
           </Text>
         </Box>
 
         {/* Form */}
         <Box
-          style={{
-            flex: 1,
-            backgroundColor: c.background,
-            borderTopLeftRadius: 28,
-            borderTopRightRadius: 28,
-            marginTop: -16,
-            paddingHorizontal: 24,
-            paddingTop: 32,
-            paddingBottom: insets.bottom + 32,
-          }}
+          className="flex-1 bg-background rounded-t-3xl"
+          style={{ marginTop: -16, paddingBottom: insets.bottom + 32, paddingHorizontal: 24, paddingTop: 32 }}
         >
           {/* Error */}
           {error ? (
-            <Box
-              style={{
-                backgroundColor: '#FF444415',
-                borderRadius: 12,
-                borderWidth: 1,
-                borderColor: '#FF444430',
-                paddingHorizontal: 14,
-                paddingVertical: 10,
-                marginBottom: 18,
-              }}
-            >
-              <Text style={{ color: '#FF4444', fontSize: 13 }}>{error}</Text>
+            <Box className="bg-destructive/8 rounded-xl border border-destructive/19 px-3.5 py-2.5 mb-4">
+              <Text size="sm" className="text-destructive">{error}</Text>
             </Box>
           ) : null}
 
-          {/* Full Name */}
-          <Box style={{ marginBottom: 14 }}>
-            <Text
-              style={{
-                color: c.text,
-                fontSize: 13,
-                fontWeight: '600',
-                marginBottom: 8,
-                letterSpacing: 0.2,
-              }}
-            >
-              Full Name
-            </Text>
-            <Box style={inputContainerStyle(nameFocused)}>
-              <User color={nameFocused ? c.gold : c.muted} size={17} />
-              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+          <VStack space="md">
+            {/* Full Name */}
+            <VStack space="xs">
+              <Text size="sm" bold className="text-foreground tracking-wide">Full Name</Text>
+              <Input className="bg-card border-2 border-border rounded-2xl h-14">
+                <InputSlot className="pl-4">
+                  <InputIcon as={User} className="text-muted-foreground" />
+                </InputSlot>
                 <InputField
-                  style={{ color: c.text, fontSize: 15, padding: 0 }}
                   placeholder="Your name"
-                  placeholderTextColor={c.muted}
                   value={name}
                   onChangeText={setName}
-                  onFocus={() => setNameFocused(true)}
-                  onBlur={() => setNameFocused(false)}
                   autoCapitalize="words"
                   autoCorrect={false}
                   returnKeyType="next"
                   onSubmitEditing={() => emailRef.current?.focus()}
                 />
               </Input>
-            </Box>
-          </Box>
+            </VStack>
 
-          {/* Email */}
-          <Box style={{ marginBottom: 14 }}>
-            <Text
-              style={{
-                color: c.text,
-                fontSize: 13,
-                fontWeight: '600',
-                marginBottom: 8,
-                letterSpacing: 0.2,
-              }}
-            >
-              Email
-            </Text>
-            <Box style={inputContainerStyle(emailFocused)}>
-              <Mail color={emailFocused ? c.gold : c.muted} size={17} />
-              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+            {/* Email */}
+            <VStack space="xs">
+              <Text size="sm" bold className="text-foreground tracking-wide">Email</Text>
+              <Input className="bg-card border-2 border-border rounded-2xl h-14">
+                <InputSlot className="pl-4">
+                  <InputIcon as={Mail} className="text-muted-foreground" />
+                </InputSlot>
                 <InputField
                   ref={emailRef}
-                  style={{ color: c.text, fontSize: 15, padding: 0 }}
                   placeholder="you@example.com"
-                  placeholderTextColor={c.muted}
                   value={email}
                   onChangeText={setEmail}
-                  onFocus={() => setEmailFocused(true)}
-                  onBlur={() => setEmailFocused(false)}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -223,107 +140,59 @@ export default function RegisterScreen() {
                   onSubmitEditing={() => passwordRef.current?.focus()}
                 />
               </Input>
-            </Box>
-          </Box>
+            </VStack>
 
-          {/* Password */}
-          <Box style={{ marginBottom: 8 }}>
-            <Text
-              style={{
-                color: c.text,
-                fontSize: 13,
-                fontWeight: '600',
-                marginBottom: 8,
-                letterSpacing: 0.2,
-              }}
-            >
-              Password
-            </Text>
-            <Box style={inputContainerStyle(passwordFocused)}>
-              <Lock color={passwordFocused ? c.gold : c.muted} size={17} />
-              <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
+            {/* Password */}
+            <VStack space="xs">
+              <Text size="sm" bold className="text-foreground tracking-wide">Password</Text>
+              <Input className="bg-card border-2 border-border rounded-2xl h-14">
+                <InputSlot className="pl-4">
+                  <InputIcon as={Lock} className="text-muted-foreground" />
+                </InputSlot>
                 <InputField
                   ref={passwordRef}
-                  style={{ color: c.text, fontSize: 15, padding: 0 }}
                   placeholder="Min. 8 characters"
-                  placeholderTextColor={c.muted}
                   value={password}
                   onChangeText={setPassword}
-                  onFocus={() => setPasswordFocused(true)}
-                  onBlur={() => setPasswordFocused(false)}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
                   returnKeyType="done"
                   onSubmitEditing={handleRegister}
                 />
+                <InputSlot className="pr-4" onPress={() => setShowPassword((v) => !v)}>
+                  <InputIcon as={showPassword ? EyeOff : Eye} className="text-muted-foreground" />
+                </InputSlot>
               </Input>
-              <Pressable
-                onPress={() => setShowPassword((v) => !v)}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                {showPassword ? (
-                  <EyeOff color={c.muted} size={18} />
-                ) : (
-                  <Eye color={c.muted} size={18} />
-                )}
-              </Pressable>
-            </Box>
-          </Box>
+            </VStack>
+          </VStack>
 
-          {/* Password hint */}
-          <Text
-            style={{
-              color: c.muted,
-              fontSize: 12,
-              marginBottom: 28,
-              paddingLeft: 4,
-            }}
-          >
+          <Text size="xs" className="text-muted-foreground mt-2 mb-7 pl-1">
             Use at least 8 characters with a mix of letters and numbers
           </Text>
 
           {/* Create Account Button */}
-          <Pressable
-            onPress={handleRegister}
+          <Button
+            variant="default"
+            size="lg"
+            className="w-full rounded-2xl h-14 mb-6"
             disabled={loading}
-            style={{
-              backgroundColor: c.gold,
-              borderRadius: 16,
-              paddingVertical: 16,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 24,
-              opacity: loading ? 0.7 : 1,
-            }}
+            onPress={handleRegister}
           >
             {loading ? (
-              <Spinner color={isDark ? '#121212' : '#FFFFFF'} />
+              <><ButtonSpinner /><ButtonText className="ml-2">Creating...</ButtonText></>
             ) : (
-              <Text
-                style={{
-                  color: isDark ? '#121212' : '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: '700',
-                  letterSpacing: 0.2,
-                }}
-              >
-                Create Account
-              </Text>
+              <ButtonText className="text-base font-bold">Create Account</ButtonText>
             )}
-          </Pressable>
+          </Button>
 
           {/* Login Link */}
-          <Box style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
-            <Text style={{ color: c.muted, fontSize: 14 }}>
-              Already have an account?
-            </Text>
+          <HStack space="xs" className="justify-center">
+            <Text size="sm" className="text-muted-foreground">Already have an account?</Text>
             <Pressable onPress={() => router.back()}>
-              <Text style={{ color: c.gold, fontSize: 14, fontWeight: '600' }}>
-                Sign In
-              </Text>
+              <Text size="sm" bold className="text-primary">Sign In</Text>
             </Pressable>
-          </Box>
+          </HStack>
         </Box>
       </ScrollView>
     </KeyboardAvoidingView>

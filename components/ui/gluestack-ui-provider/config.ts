@@ -2,6 +2,7 @@ import { vars } from 'nativewind';
 
 export const colors = {
   light: {
+    '--hero': '15 22 40',                 // #0F1628 — dark hero/player card background
     '--primary': '199 159 39',            // #C79F27 — brand gold
     '--primary-foreground': '255 255 255', // white on gold
     '--background': '255 255 255',         // #FFFFFF
@@ -22,6 +23,7 @@ export const colors = {
     '--ring': '199 159 39',
   },
   dark: {
+    '--hero': '15 22 40',                  // #0F1628 — dark hero/player card background
     '--primary': '212 175 55',             // #D4AF37 — luminous gold
     '--primary-foreground': '18 18 18',    // near-black on gold
     '--background': '18 18 18',            // #121212

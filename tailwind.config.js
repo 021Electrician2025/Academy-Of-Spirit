@@ -11,7 +11,7 @@ module.exports = {
   safelist: [
     {
       pattern:
-        /(bg|border|text|stroke|fill)-(foreground|card|popover|muted|destructive|border|input|ring|white|chart|sidebar|primary|secondary|typography|background|accent)(\/\d+)?$/,
+        /(bg|border|text|stroke|fill)-(foreground|card|popover|muted|destructive|border|input|ring|white|chart|sidebar|primary|secondary|typography|background|accent|hero)(\/\d+)?$/,
     },
     {
       pattern:
@@ -62,6 +62,10 @@ module.exports = {
             'rgb(var(--sidebar-accent-foreground) / <alpha-value>)',
           'border': 'rgb(var(--sidebar-border))',
           'ring': 'rgb(var(--sidebar-ring) / <alpha-value>)',
+        },
+
+        hero: {
+          DEFAULT: 'rgb(var(--hero)/<alpha-value>)',
         },
 
         primary: {

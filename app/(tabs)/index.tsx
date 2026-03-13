@@ -3,12 +3,14 @@ import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Box } from '@/components/ui/box';
+import { HStack } from '@/components/ui/hstack';
+import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { Colors } from '@/constants/theme';
+import { Heading } from '@/components/ui/heading';
+import { VStack } from '@/components/ui/vstack';
 import { useAuth } from '@/context/auth-context';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 const QUICK_STARTS = [
   { duration: '5 min', label: 'Quick Reset' },
@@ -40,195 +42,121 @@ const today = new Date().toLocaleDateString('en-US', {
 });
 
 export default function HomeScreen() {
-  const colorScheme = useColorScheme();
-  const c = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const isDark = colorScheme === 'dark';
   const { user } = useAuth();
   const displayName = user?.name || user?.email?.split('@')[0] || 'User';
   const avatarLetter = displayName.charAt(0).toUpperCase();
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: c.background }}
+      className="flex-1 bg-background"
       contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* Header */}
-      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 8 }}>
-        <Box style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <Box style={{ gap: 2 }}>
-            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Sun color={c.muted} size={14} strokeWidth={2} />
-              <Text style={{ color: c.muted, fontSize: 14 }}>Good morning</Text>
-            </Box>
-            <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5 }}>
+      <Box className="px-6 pb-2" style={{ paddingTop: insets.top + 16 }}>
+        <HStack className="items-start justify-between">
+          <VStack space="xs">
+            <HStack space="xs" className="items-center">
+              <Icon as={Sun} className="text-muted-foreground" size="xs" />
+              <Text size="sm" className="text-muted-foreground">Good morning</Text>
+            </HStack>
+            <Heading size="2xl" className="text-foreground tracking-tight">
               {displayName}
-            </Text>
+            </Heading>
+          </VStack>
+          <Box className="w-12 h-12 rounded-full bg-primary items-center justify-center">
+            <Text size="lg" bold className="text-primary-foreground">{avatarLetter}</Text>
           </Box>
-          <Box
-            style={{
-              width: 46,
-              height: 46,
-              borderRadius: 23,
-              backgroundColor: c.gold,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Text style={{ color: isDark ? '#121212' : '#FFFFFF', fontSize: 18, fontWeight: '700' }}>
-              {avatarLetter}
-            </Text>
-          </Box>
-        </Box>
+        </HStack>
 
         {/* Date & Streak */}
-        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
-          <Text style={{ color: c.muted, fontSize: 13 }}>{today}</Text>
-          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Flame color={c.gold} size={15} fill={c.gold} />
-            <Text style={{ color: c.gold, fontSize: 13, fontWeight: '600' }}>7 day streak</Text>
-          </Box>
-        </Box>
+        <HStack className="items-center justify-between mt-3">
+          <Text size="xs" className="text-muted-foreground">{today}</Text>
+          <HStack space="xs" className="items-center">
+            <Icon as={Flame} className="text-primary fill-primary" size="xs" />
+            <Text size="xs" bold className="text-primary">7 day streak</Text>
+          </HStack>
+        </HStack>
       </Box>
 
       {/* Today's Practice Hero Card */}
-      <Box style={{ marginHorizontal: 24, marginTop: 16, marginBottom: 24 }}>
-        <Box
-          style={{
-            height: 220,
-            borderRadius: 24,
-            overflow: 'hidden',
-            backgroundColor: '#0F1628',
-            padding: 24,
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box style={{ gap: 6 }}>
-            <Text
-              style={{
-                color: c.gold,
-                fontSize: 11,
-                fontWeight: '700',
-                letterSpacing: 2.5,
-                textTransform: 'uppercase',
-              }}
-            >
+      <Box className="mx-6 mt-4 mb-6">
+        <Box className="bg-hero rounded-3xl overflow-hidden p-6 h-56 justify-between">
+          <VStack space="xs">
+            <Text size="2xs" bold className="text-primary tracking-widest uppercase">
               Today&apos;s Practice
             </Text>
-            <Text style={{ color: '#FFFFFF', fontSize: 26, fontWeight: '700', letterSpacing: -0.5 }}>
+            <Heading size="2xl" className="text-white tracking-tight">
               Morning Clarity
-            </Text>
-            <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14 }}>
+            </Heading>
+            <Text size="sm" className="text-white/55">
               15 min · Guided · Beginner
             </Text>
-          </Box>
+          </VStack>
 
-          <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                borderRadius: 100,
-                paddingHorizontal: 14,
-                paddingVertical: 7,
-              }}
-            >
-              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>Mindfulness Series</Text>
+          <HStack className="items-center justify-between">
+            <Box className="bg-white/10 rounded-full px-3.5 py-1.5">
+              <Text size="sm" className="text-white/70">Mindfulness Series</Text>
             </Box>
-            <Pressable
-              style={{
-                width: 52,
-                height: 52,
-                borderRadius: 26,
-                backgroundColor: c.gold,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Play color={isDark ? '#121212' : '#211E1F'} size={18} fill={isDark ? '#121212' : '#211E1F'} />
+            <Pressable className="w-14 h-14 rounded-full bg-primary items-center justify-center">
+              <Icon as={Play} className="text-primary-foreground fill-primary-foreground" size="lg" />
             </Pressable>
-          </Box>
+          </HStack>
         </Box>
       </Box>
 
       {/* Quick Start */}
-      <Box style={{ paddingHorizontal: 24, marginBottom: 24, gap: 14 }}>
-        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Quick Start</Text>
-          <Text style={{ color: c.gold, fontSize: 13, fontWeight: '500' }}>See all</Text>
-        </Box>
-        <Box style={{ flexDirection: 'row', gap: 10 }}>
+      <VStack space="md" className="px-6 mb-6">
+        <HStack className="items-center justify-between">
+          <Text size="md" bold className="text-foreground">Quick Start</Text>
+          <Text size="sm" className="text-primary font-medium">See all</Text>
+        </HStack>
+        <HStack space="sm">
           {QUICK_STARTS.map((item, i) => (
             <Pressable
               key={i}
-              style={{
-                flex: 1,
-                backgroundColor: c.card,
-                borderRadius: 18,
-                padding: 16,
-                alignItems: 'center',
-                borderWidth: 1,
-                borderColor: c.border,
-                boxShadow: isDark ? undefined : '0 2px 8px rgba(0,0,0,0.05)',
-              }}
+              className="flex-1 bg-card rounded-[18px] p-4 items-center border border-border"
             >
-              <Text style={{ color: c.gold, fontSize: 17, fontWeight: '700' }}>{item.duration}</Text>
-              <Text style={{ color: c.muted, fontSize: 11, marginTop: 4 }}>{item.label}</Text>
+              <Text size="lg" bold className="text-primary">{item.duration}</Text>
+              <Text size="2xs" className="text-muted-foreground mt-1">{item.label}</Text>
             </Pressable>
           ))}
-        </Box>
-      </Box>
+        </HStack>
+      </VStack>
 
       {/* Weekly Progress */}
-      <Box
-        style={{
-          marginHorizontal: 24,
-          marginBottom: 24,
-          backgroundColor: c.card,
-          borderRadius: 24,
-          padding: 20,
-          borderWidth: 1,
-          borderColor: c.border,
-          boxShadow: isDark ? undefined : '0 2px 8px rgba(0,0,0,0.04)',
-        }}
-      >
-        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <Text style={{ color: c.text, fontSize: 15, fontWeight: '600' }}>Weekly Progress</Text>
-          <Text style={{ color: c.muted, fontSize: 12 }}>5 of 7 days</Text>
-        </Box>
-        <Box style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <Box className="mx-6 mb-6 bg-card rounded-3xl p-5 border border-border">
+        <HStack className="items-center justify-between mb-4">
+          <Text size="sm" bold className="text-foreground">Weekly Progress</Text>
+          <Text size="xs" className="text-muted-foreground">5 of 7 days</Text>
+        </HStack>
+        <HStack className="justify-between">
           {STREAK_DAYS.map((day, i) => (
-            <Box key={i} style={{ alignItems: 'center', gap: 6 }}>
+            <VStack key={i} space="xs" className="items-center">
               <Box
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 18,
-                  backgroundColor: day.done ? c.gold : c.border,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+                className={`w-9 h-9 rounded-full items-center justify-center ${day.done ? 'bg-primary' : 'bg-border'}`}
               >
                 {day.done && (
-                  <Check color={isDark ? '#121212' : '#FFFFFF'} size={14} strokeWidth={3} />
+                  <Icon as={Check} className="text-primary-foreground" size="xs" />
                 )}
               </Box>
-              <Text style={{ color: c.muted, fontSize: 11 }}>{day.label}</Text>
-            </Box>
+              <Text size="2xs" className="text-muted-foreground">{day.label}</Text>
+            </VStack>
           ))}
-        </Box>
+        </HStack>
       </Box>
 
       {/* Recommended */}
-      <Box style={{ gap: 14, marginBottom: 8 }}>
-        <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24 }}>
-          <Text style={{ color: c.text, fontSize: 17, fontWeight: '600' }}>Recommended</Text>
-          <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-            <Text style={{ color: c.gold, fontSize: 13, fontWeight: '500' }}>See all</Text>
-            <ChevronRight color={c.gold} size={14} />
-          </Box>
-        </Box>
+      <VStack space="md" className="mb-2">
+        <HStack className="items-center justify-between px-6">
+          <Text size="md" bold className="text-foreground">Recommended</Text>
+          <HStack space="xs" className="items-center">
+            <Text size="sm" className="text-primary font-medium">See all</Text>
+            <Icon as={ChevronRight} className="text-primary" size="xs" />
+          </HStack>
+        </HStack>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -237,38 +165,18 @@ export default function HomeScreen() {
           {RECOMMENDED.map((course, i) => (
             <Pressable
               key={i}
-              style={{
-                width: 158,
-                height: 200,
-                borderRadius: 22,
-                backgroundColor: course.bg,
-                overflow: 'hidden',
-                padding: 18,
-                justifyContent: 'flex-end',
-              }}
+              className="w-40 h-52 rounded-[22px] overflow-hidden p-[18px] justify-end"
+              style={{ backgroundColor: course.bg }}
             >
-              <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginBottom: 4 }}>
-                {course.sessions} sessions
-              </Text>
-              <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '700', lineHeight: 22 }}>
-                {course.title}
-              </Text>
-              <Box
-                style={{
-                  marginTop: 10,
-                  alignSelf: 'flex-start',
-                  backgroundColor: 'rgba(255,255,255,0.15)',
-                  borderRadius: 100,
-                  paddingHorizontal: 10,
-                  paddingVertical: 4,
-                }}
-              >
-                <Text style={{ color: 'rgba(255,255,255,0.85)', fontSize: 11 }}>{course.level}</Text>
+              <Text size="xs" className="text-white/50 mb-1">{course.sessions} sessions</Text>
+              <Text size="md" bold className="text-white leading-tight">{course.title}</Text>
+              <Box className="mt-2.5 self-start bg-white/15 rounded-full px-2.5 py-1">
+                <Text size="2xs" className="text-white/85">{course.level}</Text>
               </Box>
             </Pressable>
           ))}
         </ScrollView>
-      </Box>
+      </VStack>
     </ScrollView>
   );
 }

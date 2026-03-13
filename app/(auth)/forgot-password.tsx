@@ -1,30 +1,26 @@
 import React, { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { Platform } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ArrowLeft, Mail, CheckCircle } from 'lucide-react-native';
 
 import { Box } from '@/components/ui/box';
-import { Input, InputField } from '@/components/ui/input';
+import { VStack } from '@/components/ui/vstack';
+import { HStack } from '@/components/ui/hstack';
+import { Text } from '@/components/ui/text';
+import { Heading } from '@/components/ui/heading';
+import { Button, ButtonText, ButtonSpinner } from '@/components/ui/button';
+import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
+import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
-import { Spinner } from '@/components/ui/spinner';
-import { Text } from '@/components/ui/text';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
 import { useAuth } from '@/context/auth-context';
 
 export default function ForgotPasswordScreen() {
-  const colorScheme = useColorScheme();
-  const c = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const isDark = colorScheme === 'dark';
 
   const [email, setEmail] = useState('');
-  const [emailFocused, setEmailFocused] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
@@ -49,258 +45,128 @@ export default function ForgotPasswordScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: c.background }}
+      className="flex-1 bg-background"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        style={{ flex: 1 }}
+        className="flex-1"
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
         <Box
-          style={{
-            paddingTop: insets.top + 16,
-            paddingHorizontal: 24,
-            paddingBottom: 40,
-            backgroundColor: '#0F1628',
-          }}
+          className="bg-hero px-6 pb-10"
+          style={{ paddingTop: insets.top + 16 }}
         >
           <Pressable
             onPress={() => router.back()}
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 12,
-              backgroundColor: 'rgba(255,255,255,0.08)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 28,
-            }}
+            className="w-10 h-10 rounded-xl bg-white/8 items-center justify-center mb-7"
           >
-            <ArrowLeft color="rgba(255,255,255,0.8)" size={20} />
+            <Icon as={ArrowLeft} className="text-white/80" size="lg" />
           </Pressable>
-          <Text
-            style={{
-              color: '#FFFFFF',
-              fontSize: 26,
-              fontWeight: '700',
-              letterSpacing: -0.5,
-              marginBottom: 4,
-            }}
-          >
+          <Heading size="2xl" className="text-white tracking-tight mb-1">
             Forgot Password?
-          </Text>
-          <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14 }}>
+          </Heading>
+          <Text size="sm" className="text-white/45">
             No worries — we&apos;ll send you reset instructions
           </Text>
         </Box>
 
         {/* Form */}
         <Box
-          style={{
-            flex: 1,
-            backgroundColor: c.background,
-            borderTopLeftRadius: 28,
-            borderTopRightRadius: 28,
-            marginTop: -16,
-            paddingHorizontal: 24,
-            paddingTop: 32,
-            paddingBottom: insets.bottom + 32,
-          }}
+          className="flex-1 bg-background rounded-t-3xl"
+          style={{ marginTop: -16, paddingBottom: insets.bottom + 32, paddingHorizontal: 24, paddingTop: 32 }}
         >
           {sent ? (
             /* Success state */
-            <Box style={{ alignItems: 'center', paddingTop: 24, gap: 16 }}>
-              <Box
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: 36,
-                  backgroundColor: c.gold + '18',
-                  borderWidth: 1.5,
-                  borderColor: c.gold + '40',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <CheckCircle color={c.gold} size={34} />
+            <VStack space="lg" className="items-center pt-6">
+              <Box className="w-[72px] h-[72px] rounded-full bg-primary/9 border border-primary/25 items-center justify-center">
+                <Icon as={CheckCircle} className="text-primary" size="xl" />
               </Box>
-              <Text
-                style={{
-                  color: c.text,
-                  fontSize: 20,
-                  fontWeight: '700',
-                  letterSpacing: -0.3,
-                  textAlign: 'center',
-                }}
-              >
+              <Heading size="lg" className="text-foreground text-center tracking-tight">
                 Check your inbox
-              </Text>
-              <Text
-                style={{
-                  color: c.muted,
-                  fontSize: 14,
-                  textAlign: 'center',
-                  lineHeight: 22,
-                  paddingHorizontal: 8,
-                }}
-              >
+              </Heading>
+              <Text size="sm" className="text-muted-foreground text-center leading-relaxed px-2">
                 We sent a password reset link to{'\n'}
-                <Text style={{ color: c.text, fontWeight: '600' }}>{email}</Text>
+                <Text size="sm" bold className="text-foreground">{email}</Text>
               </Text>
 
-              <Pressable
+              <Button
+                variant="default"
+                size="lg"
+                className="w-full rounded-2xl h-14"
                 onPress={() => router.back()}
-                style={{
-                  backgroundColor: c.gold,
-                  borderRadius: 16,
-                  paddingVertical: 16,
-                  alignItems: 'center',
-                  width: '100%',
-                  marginTop: 12,
-                }}
               >
-                <Text
-                  style={{
-                    color: isDark ? '#121212' : '#FFFFFF',
-                    fontSize: 16,
-                    fontWeight: '700',
-                    letterSpacing: 0.2,
-                  }}
-                >
-                  Back to Sign In
-                </Text>
-              </Pressable>
+                <ButtonText className="text-base font-bold">Back to Sign In</ButtonText>
+              </Button>
 
               <Pressable
                 onPress={() => { setSent(false); setEmail(''); }}
-                style={{ paddingVertical: 8 }}
+                className="py-2"
               >
-                <Text style={{ color: c.muted, fontSize: 13 }}>
+                <Text size="sm" className="text-muted-foreground">
                   Didn&apos;t receive it?{' '}
-                  <Text style={{ color: c.gold, fontWeight: '600' }}>Resend</Text>
+                  <Text size="sm" bold className="text-primary">Resend</Text>
                 </Text>
               </Pressable>
-            </Box>
+            </VStack>
           ) : (
             <>
-              {/* Instruction */}
-              <Text
-                style={{
-                  color: c.muted,
-                  fontSize: 14,
-                  lineHeight: 22,
-                  marginBottom: 28,
-                }}
-              >
+              <Text size="sm" className="text-muted-foreground leading-relaxed mb-7">
                 Enter the email address associated with your account and we&apos;ll
                 send you a link to reset your password.
               </Text>
 
               {/* Error */}
               {error ? (
-                <Box
-                  style={{
-                    backgroundColor: '#FF444415',
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor: '#FF444430',
-                    paddingHorizontal: 14,
-                    paddingVertical: 10,
-                    marginBottom: 18,
-                  }}
-                >
-                  <Text style={{ color: '#FF4444', fontSize: 13 }}>{error}</Text>
+                <Box className="bg-destructive/8 rounded-xl border border-destructive/19 px-3.5 py-2.5 mb-4">
+                  <Text size="sm" className="text-destructive">{error}</Text>
                 </Box>
               ) : null}
 
               {/* Email Input */}
-              <Box style={{ marginBottom: 28 }}>
-                <Text
-                  style={{
-                    color: c.text,
-                    fontSize: 13,
-                    fontWeight: '600',
-                    marginBottom: 8,
-                    letterSpacing: 0.2,
-                  }}
-                >
-                  Email
-                </Text>
-                <Box
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: c.card,
-                    borderRadius: 14,
-                    borderWidth: 1.5,
-                    borderColor: emailFocused ? c.gold : c.border,
-                    paddingHorizontal: 14,
-                    paddingVertical: Platform.OS === 'ios' ? 14 : 10,
-                    gap: 10,
-                  }}
-                >
-                  <Mail color={emailFocused ? c.gold : c.muted} size={17} />
-                  <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
-                    <InputField
-                      style={{ color: c.text, fontSize: 15, padding: 0 }}
-                      placeholder="you@example.com"
-                      placeholderTextColor={c.muted}
-                      value={email}
-                      onChangeText={setEmail}
-                      onFocus={() => setEmailFocused(true)}
-                      onBlur={() => setEmailFocused(false)}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      returnKeyType="done"
-                      onSubmitEditing={handleSendReset}
-                    />
-                  </Input>
-                </Box>
-              </Box>
+              <VStack space="xs" className="mb-7">
+                <Text size="sm" bold className="text-foreground tracking-wide">Email</Text>
+                <Input className="bg-card border-2 border-border rounded-2xl h-14">
+                  <InputSlot className="pl-4">
+                    <InputIcon as={Mail} className="text-muted-foreground" />
+                  </InputSlot>
+                  <InputField
+                    placeholder="you@example.com"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    onSubmitEditing={handleSendReset}
+                  />
+                </Input>
+              </VStack>
 
               {/* Send Button */}
-              <Pressable
-                onPress={handleSendReset}
+              <Button
+                variant="default"
+                size="lg"
+                className="w-full rounded-2xl h-14 mb-6"
                 disabled={loading}
-                style={{
-                  backgroundColor: c.gold,
-                  borderRadius: 16,
-                  paddingVertical: 16,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: 24,
-                  opacity: loading ? 0.7 : 1,
-                }}
+                onPress={handleSendReset}
               >
                 {loading ? (
-                  <Spinner color={isDark ? '#121212' : '#FFFFFF'} />
+                  <><ButtonSpinner /><ButtonText className="ml-2">Sending...</ButtonText></>
                 ) : (
-                  <Text
-                    style={{
-                      color: isDark ? '#121212' : '#FFFFFF',
-                      fontSize: 16,
-                      fontWeight: '700',
-                      letterSpacing: 0.2,
-                    }}
-                  >
-                    Send Reset Link
-                  </Text>
+                  <ButtonText className="text-base font-bold">Send Reset Link</ButtonText>
                 )}
-              </Pressable>
+              </Button>
 
               {/* Back to login */}
-              <Box style={{ flexDirection: 'row', justifyContent: 'center', gap: 4 }}>
-                <Text style={{ color: c.muted, fontSize: 14 }}>Remember it?</Text>
+              <HStack space="xs" className="justify-center">
+                <Text size="sm" className="text-muted-foreground">Remember it?</Text>
                 <Pressable onPress={() => router.back()}>
-                  <Text style={{ color: c.gold, fontSize: 14, fontWeight: '600' }}>
-                    Sign In
-                  </Text>
+                  <Text size="sm" bold className="text-primary">Sign In</Text>
                 </Pressable>
-              </Box>
+              </HStack>
             </>
           )}
         </Box>

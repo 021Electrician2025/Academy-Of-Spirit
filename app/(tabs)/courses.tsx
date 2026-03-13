@@ -3,12 +3,15 @@ import { Search, Star, Clock, ChevronRight } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Box } from '@/components/ui/box';
-import { Input, InputField } from '@/components/ui/input';
+import { Button, ButtonText } from '@/components/ui/button';
+import { HStack } from '@/components/ui/hstack';
+import { Icon } from '@/components/ui/icon';
+import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Heading } from '@/components/ui/heading';
+import { VStack } from '@/components/ui/vstack';
 
 const CATEGORIES = ['All', 'Mindfulness', 'Breathing', 'Sleep', 'Stress', 'Focus'];
 
@@ -24,94 +27,39 @@ const FEATURED = {
 };
 
 const COURSES = [
-  {
-    title: 'Mindful Mornings',
-    instructor: 'James Park',
-    duration: '15 min/day',
-    sessions: 14,
-    rating: 4.8,
-    level: 'Beginner',
-    tag: 'Mindfulness',
-    tagColor: '#1A2B4A',
-  },
-  {
-    title: 'Box Breathing Pro',
-    instructor: 'Emma Wilson',
-    duration: '10 min/day',
-    sessions: 7,
-    rating: 4.7,
-    level: 'All Levels',
-    tag: 'Breathing',
-    tagColor: '#1A3A2A',
-  },
-  {
-    title: 'Deep Sleep Protocol',
-    instructor: 'Dr. Raj Patel',
-    duration: '20 min',
-    sessions: 21,
-    rating: 4.9,
-    level: 'Beginner',
-    tag: 'Sleep',
-    tagColor: '#2D1A4A',
-  },
-  {
-    title: 'Anxiety Relief',
-    instructor: 'Lisa Torres',
-    duration: '12 min/day',
-    sessions: 10,
-    rating: 4.6,
-    level: 'Beginner',
-    tag: 'Stress',
-    tagColor: '#3A1A1A',
-  },
+  { title: 'Mindful Mornings', instructor: 'James Park', duration: '15 min/day', sessions: 14, rating: 4.8, level: 'Beginner', tag: 'Mindfulness', tagColor: '#1A2B4A' },
+  { title: 'Box Breathing Pro', instructor: 'Emma Wilson', duration: '10 min/day', sessions: 7, rating: 4.7, level: 'All Levels', tag: 'Breathing', tagColor: '#1A3A2A' },
+  { title: 'Deep Sleep Protocol', instructor: 'Dr. Raj Patel', duration: '20 min', sessions: 21, rating: 4.9, level: 'Beginner', tag: 'Sleep', tagColor: '#2D1A4A' },
+  { title: 'Anxiety Relief', instructor: 'Lisa Torres', duration: '12 min/day', sessions: 10, rating: 4.6, level: 'Beginner', tag: 'Stress', tagColor: '#3A1A1A' },
 ];
 
 export default function CoursesScreen() {
-  const colorScheme = useColorScheme();
-  const c = Colors[colorScheme ?? 'light'];
   const insets = useSafeAreaInsets();
-  const isDark = colorScheme === 'dark';
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: c.background }}
+      className="flex-1 bg-background"
       contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 24 }}
     >
       {/* Header */}
-      <Box style={{ paddingTop: insets.top + 16, paddingHorizontal: 24, paddingBottom: 16 }}>
-        <Text style={{ color: c.text, fontSize: 28, fontWeight: '700', letterSpacing: -0.5, marginBottom: 16 }}>
-          Courses
-        </Text>
+      <Box className="px-6 pb-4" style={{ paddingTop: insets.top + 16 }}>
+        <Heading size="2xl" className="text-foreground tracking-tight mb-4">Courses</Heading>
 
         {/* Search */}
-        <Box
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: c.card,
-            borderRadius: 16,
-            paddingHorizontal: 14,
-            paddingVertical: 12,
-            borderWidth: 1,
-            borderColor: c.border,
-            gap: 10,
-          }}
-        >
-          <Search color={c.muted} size={17} strokeWidth={2} />
-          <Input style={{ flex: 1, borderWidth: 0, backgroundColor: 'transparent' }}>
-            <InputField
-              value={search}
-              onChangeText={setSearch}
-              placeholder="Search courses..."
-              placeholderTextColor={c.muted}
-              style={{ color: c.text, fontSize: 15 }}
-            />
-          </Input>
-        </Box>
+        <Input className="bg-card border border-border rounded-2xl h-12">
+          <InputSlot className="pl-4">
+            <InputIcon as={Search} className="text-muted-foreground" />
+          </InputSlot>
+          <InputField
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search courses..."
+          />
+        </Input>
       </Box>
 
       {/* Category Filters */}
@@ -123,142 +71,96 @@ export default function CoursesScreen() {
         {CATEGORIES.map((cat) => {
           const isActive = cat === activeCategory;
           return (
-            <Pressable
+            <Button
               key={cat}
+              variant={isActive ? 'default' : 'outline'}
+              size="sm"
+              className="rounded-full"
               onPress={() => setActiveCategory(cat)}
-              style={{
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                borderRadius: 100,
-                backgroundColor: isActive ? c.gold : c.card,
-                borderWidth: 1,
-                borderColor: isActive ? c.gold : c.border,
-              }}
             >
-              <Text
-                style={{
-                  fontSize: 13,
-                  fontWeight: '600',
-                  color: isActive ? (isDark ? '#121212' : '#FFFFFF') : c.muted,
-                }}
-              >
+              <ButtonText className={!isActive ? 'text-muted-foreground' : undefined}>
                 {cat}
-              </Text>
-            </Pressable>
+              </ButtonText>
+            </Button>
           );
         })}
       </ScrollView>
 
       {/* Featured Course */}
-      <Box style={{ marginHorizontal: 24, marginBottom: 28 }}>
-        <Box
-          style={{
-            backgroundColor: FEATURED.bg,
-            borderRadius: 24,
-            padding: 24,
-            gap: 16,
-          }}
-        >
-          <Box
-            style={{
-              alignSelf: 'flex-start',
-              backgroundColor: c.gold,
-              borderRadius: 100,
-              paddingHorizontal: 12,
-              paddingVertical: 4,
-            }}
-          >
-            <Text style={{ color: isDark ? '#121212' : '#211E1F', fontSize: 11, fontWeight: '700' }}>
-              FEATURED
+      <Box className="mx-6 mb-7">
+        <Box className="bg-hero rounded-3xl p-6" style={{ gap: 16 }}>
+          <Box className="self-start bg-primary rounded-full px-3 py-1">
+            <Text size="2xs" bold className="text-primary-foreground uppercase tracking-widest">
+              Featured
             </Text>
           </Box>
 
-          <Box style={{ gap: 6 }}>
-            <Text style={{ color: '#FFFFFF', fontSize: 22, fontWeight: '700', letterSpacing: -0.3 }}>
-              {FEATURED.title}
-            </Text>
-            <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
-              with {FEATURED.instructor}
-            </Text>
-          </Box>
+          <VStack space="xs">
+            <Heading size="xl" className="text-white tracking-tight">{FEATURED.title}</Heading>
+            <Text size="sm" className="text-white/60">with {FEATURED.instructor}</Text>
+          </VStack>
 
-          <Box style={{ flexDirection: 'row', gap: 16 }}>
-            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-              <Clock color="rgba(255,255,255,0.5)" size={13} />
-              <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{FEATURED.duration}</Text>
-            </Box>
-            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-              <Star color={c.gold} size={13} fill={c.gold} />
-              <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
+          <HStack space="lg">
+            <HStack space="xs" className="items-center">
+              <Icon as={Clock} className="text-white/50" size="xs" />
+              <Text size="sm" className="text-white/60">{FEATURED.duration}</Text>
+            </HStack>
+            <HStack space="xs" className="items-center">
+              <Icon as={Star} className="text-primary fill-primary" size="xs" />
+              <Text size="sm" className="text-white/60">
                 {FEATURED.rating} · {FEATURED.students} students
               </Text>
-            </Box>
-          </Box>
+            </HStack>
+          </HStack>
 
-          <Pressable
-            style={{
-              backgroundColor: c.gold,
-              borderRadius: 14,
-              paddingVertical: 14,
-              alignItems: 'center',
-            }}
-          >
-            <Text style={{ color: isDark ? '#121212' : '#211E1F', fontSize: 15, fontWeight: '700' }}>
-              Start Course
-            </Text>
-          </Pressable>
+          <Button variant="default" size="lg" className="w-full rounded-2xl">
+            <ButtonText className="font-bold">Start Course</ButtonText>
+          </Button>
         </Box>
       </Box>
 
       {/* Course List */}
-      <Box style={{ paddingHorizontal: 24, gap: 12 }}>
-        <Text style={{ color: c.text, fontSize: 17, fontWeight: '600', marginBottom: 4 }}>
-          All Courses
-        </Text>
+      <VStack space="md" className="px-6">
+        <Text size="md" bold className="text-foreground mb-1">All Courses</Text>
         {COURSES.map((course, i) => (
           <Pressable
             key={i}
-            style={{
-              flexDirection: 'row',
-              backgroundColor: c.card,
-              borderRadius: 18,
-              overflow: 'hidden',
-              borderWidth: 1,
-              borderColor: c.border,
-              boxShadow: isDark ? undefined : '0 2px 6px rgba(0,0,0,0.04)',
-            }}
+            className="flex-row bg-card rounded-[18px] overflow-hidden border border-border"
           >
             {/* Color accent strip */}
-            <Box style={{ width: 56, backgroundColor: course.tagColor, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 10, fontWeight: '600', textAlign: 'center', paddingHorizontal: 4 }}>
+            <Box
+              className="w-14 justify-center items-center"
+              style={{ backgroundColor: course.tagColor }}
+            >
+              <Text size="2xs" bold className="text-white/80 text-center px-1">
                 {course.tag}
               </Text>
             </Box>
 
-            <Box style={{ flex: 1, padding: 14, gap: 4 }}>
-              <Text style={{ color: c.text, fontSize: 15, fontWeight: '600' }}>{course.title}</Text>
-              <Text style={{ color: c.muted, fontSize: 12 }}>{course.instructor}</Text>
-              <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 6 }}>
-                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                  <Clock color={c.muted} size={12} />
-                  <Text style={{ color: c.muted, fontSize: 12 }}>{course.duration}</Text>
+            <VStack space="xs" className="flex-1 p-3.5">
+              <Text size="sm" bold className="text-foreground">{course.title}</Text>
+              <Text size="xs" className="text-muted-foreground">{course.instructor}</Text>
+              <HStack space="md" className="items-center mt-1.5">
+                <HStack space="xs" className="items-center">
+                  <Icon as={Clock} className="text-muted-foreground" size="2xs" />
+                  <Text size="xs" className="text-muted-foreground">{course.duration}</Text>
+                </HStack>
+                <HStack space="xs" className="items-center">
+                  <Icon as={Star} className="text-primary fill-primary" size="2xs" />
+                  <Text size="xs" className="text-muted-foreground">{course.rating}</Text>
+                </HStack>
+                <Box className="bg-border rounded-full px-2 py-0.5">
+                  <Text size="2xs" className="text-muted-foreground">{course.level}</Text>
                 </Box>
-                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                  <Star color={c.gold} size={12} fill={c.gold} />
-                  <Text style={{ color: c.muted, fontSize: 12 }}>{course.rating}</Text>
-                </Box>
-                <Box style={{ backgroundColor: c.border, borderRadius: 100, paddingHorizontal: 8, paddingVertical: 2 }}>
-                  <Text style={{ color: c.muted, fontSize: 11 }}>{course.level}</Text>
-                </Box>
-              </Box>
-            </Box>
+              </HStack>
+            </VStack>
 
-            <Box style={{ justifyContent: 'center', paddingRight: 14 }}>
-              <ChevronRight color={c.muted} size={18} />
+            <Box className="justify-center pr-3.5">
+              <Icon as={ChevronRight} className="text-muted-foreground" size="md" />
             </Box>
           </Pressable>
         ))}
-      </Box>
+      </VStack>
     </ScrollView>
   );
 }

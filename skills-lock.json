@@ -36,6 +36,11 @@
       "sourceType": "github",
       "computedHash": "4df4b383b3df7a1e18f964b6330d43743a7305d94f6f00c0ad51742ccec83666"
     },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "computedHash": "0a413bf988d06481f69bb81df2070741c3ba12dd9f1be2706d57f259c905992d"
+    },
     "use-dom": {
       "source": "expo/skills",
       "sourceType": "github",
