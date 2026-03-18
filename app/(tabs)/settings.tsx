@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
 import { router } from 'expo-router';
 import {
-  Bell, Moon, Sun, Smartphone, Volume2, Globe, Shield,
-  HelpCircle, ChevronRight, LogOut, Download, Star,
+  Bell,
+  ChevronRight,
+  Download,
+  Globe,
+  HelpCircle,
+  LogOut,
+  Moon,
+  Shield,
+  Smartphone,
+  Star,
+  Sun,
+  Volume2,
 } from 'lucide-react-native';
+import React, { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -13,16 +23,16 @@ import {
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
 import { Divider } from '@/components/ui/divider';
+import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Switch } from '@/components/ui/switch';
 import { Text } from '@/components/ui/text';
-import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
-import { useAppTheme, type ThemePreference } from '@/context/theme-context';
 import { useAuth } from '@/context/auth-context';
+import { useAppTheme, type ThemePreference } from '@/context/theme-context';
 
 type SettingRowProps = {
   icon: React.ReactNode;
@@ -186,7 +196,7 @@ export default function SettingsScreen() {
           iconBg="#F59E0B"
           label="Language"
           value="English"
-          onPress={() => {}}
+          onPress={() => { }}
         />
       </Box>
 
@@ -200,14 +210,14 @@ export default function SettingsScreen() {
           iconBg="#14B8A6"
           label="Downloaded Sessions"
           value="3 files"
-          onPress={() => {}}
+          onPress={() => { }}
         />
         <Divider className="ml-[66px]" />
         <SettingRow
           icon={<Icon as={Star} className="text-white" size="sm" />}
           iconBg="rgb(var(--primary))"
           label="Rate the App"
-          onPress={() => {}}
+          onPress={() => { }}
         />
       </Box>
 
@@ -220,14 +230,14 @@ export default function SettingsScreen() {
           icon={<Icon as={HelpCircle} className="text-white" size="sm" />}
           iconBg="#3B82F6"
           label="Help & FAQ"
-          onPress={() => {}}
+          onPress={() => { }}
         />
         <Divider className="ml-[66px]" />
         <SettingRow
           icon={<Icon as={Shield} className="text-white" size="sm" />}
           iconBg="#6B7280"
           label="Privacy Policy"
-          onPress={() => {}}
+          onPress={() => { }}
         />
       </Box>
 

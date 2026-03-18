@@ -66,6 +66,15 @@ export async function createMeditationSession(meditationId: string): Promise<str
   }
 }
 
+// Updates the duration_seconds field on a meditation record (auto-detected from audio).
+export async function updateMeditationDuration(id: string, durationSeconds: number): Promise<void> {
+  try {
+    await pb.collection('guided_meditations').update(id, { duration_seconds: durationSeconds });
+  } catch {
+    // silently fail
+  }
+}
+
 // Updates an existing session record with the current playback position.
 export async function updateMeditationSession(
   sessionId: string,
