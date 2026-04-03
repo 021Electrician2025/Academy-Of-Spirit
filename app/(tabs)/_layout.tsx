@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Home, BookOpen, Radio, Wind, Settings } from 'lucide-react-native';
+import { BookOpen, Home, Radio, Settings, Wind } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HapticTab } from '@/components/haptic-tab';
@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const c = Colors[colorScheme ?? 'light'];
+  const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
 
   return (
@@ -21,8 +22,12 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: c.tabBar,
           borderTopColor: c.tabBarBorder,
-          borderTopWidth: 0.5,
+          borderTopWidth: 1,
           elevation: 0,
+          shadowColor: isDark ? '#0F0D18' : '#C8C4BE',
+          shadowOffset: { width: 0, height: -3 },
+          shadowOpacity: isDark ? 0.9 : 0.5,
+          shadowRadius: 8,
           height: 54 + insets.bottom,
           paddingBottom: insets.bottom + 6,
           paddingTop: 6,

@@ -29,6 +29,9 @@ function RootLayoutInner() {
           <Stack.Screen name="course-details" options={{ headerShown: false, animation: 'slide_from_right' }} />
           <Stack.Screen name="lesson" options={{ headerShown: false, animation: 'slide_from_right' }} />
           <Stack.Screen name="lesson-resource" options={{ headerShown: false, animation: 'slide_from_right' }} />
+          <Stack.Screen name="lesson-infographic" options={{ headerShown: false, animation: 'slide_from_right' }} />
+          <Stack.Screen name="quiz" options={{ headerShown: false, animation: 'slide_from_right' }} />
+          <Stack.Screen name="quiz-results" options={{ headerShown: false, animation: 'slide_from_right' }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

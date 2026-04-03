@@ -1,8 +1,8 @@
+import { Calendar, Clock, Users } from 'lucide-react-native';
 import React, { useEffect } from 'react';
-import { Users, Clock, Calendar } from 'lucide-react-native';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
@@ -10,12 +10,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Box } from '@/components/ui/box';
 import { Button, ButtonText } from '@/components/ui/button';
+import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { Heading } from '@/components/ui/heading';
 import { VStack } from '@/components/ui/vstack';
 
 const LIVE_SESSION = {

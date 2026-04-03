@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import type { RecordModel } from 'pocketbase';
 import { pb } from '@/lib/pocketbase';
+import type { RecordModel } from 'pocketbase';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextValue {
   user: RecordModel | null;
@@ -14,10 +14,10 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   isLoading: true,
-  signIn: async () => {},
-  signUp: async () => {},
-  signOut: () => {},
-  requestPasswordReset: async () => {},
+  signIn: async () => { },
+  signUp: async () => { },
+  signOut: () => { },
+  requestPasswordReset: async () => { },
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme as useNativeWindScheme } from 'nativewind';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
@@ -11,7 +11,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue>({
   preference: 'system',
-  setTheme: () => {},
+  setTheme: () => { },
 });
 
 const STORAGE_KEY = '@aos:theme_preference';
