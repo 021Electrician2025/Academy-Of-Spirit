@@ -1,20 +1,19 @@
-import React, { useState, useRef } from 'react';
-import { Platform } from 'react-native';
 import { router } from 'expo-router';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react-native';
+import React, { useRef, useState } from 'react';
+import { Image, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Eye, EyeOff, Mail, Lock, Sparkles } from 'lucide-react-native';
 
 import { Box } from '@/components/ui/box';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Text } from '@/components/ui/text';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { Button, ButtonText, ButtonSpinner } from '@/components/ui/button';
-import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
-import { Icon } from '@/components/ui/icon';
+import { HStack } from '@/components/ui/hstack';
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
-import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { useAuth } from '@/context/auth-context';
 
 export default function LoginScreen() {
@@ -62,39 +61,28 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Hero Section */}
+        {/* Header */}
         <Box
-          className="bg-hero items-center"
-          style={{ paddingTop: insets.top + 48, paddingBottom: 48, gap: 12 }}
+          className="bg-hero items-center px-6 pb-10"
+          style={{ paddingTop: insets.top + 24 }}
         >
-          <Box className="w-[72px] h-[72px] rounded-full bg-primary/20 border border-primary/50 items-center justify-center">
-            <Icon as={Sparkles} className="text-primary" size="xl" />
-          </Box>
-          <VStack space="xs" className="items-center">
-            <Heading size="xl" className="text-white tracking-tight">
-              Academy of Spirit
-            </Heading>
-            <Text size="sm" className="text-white/45">
-              Find your inner peace
-            </Text>
-          </VStack>
+          <Image
+            source={require('@/assets/AoS_Logo.png')}
+            style={{ width: 170, height: 170, resizeMode: 'contain', marginBottom: 16 }}
+          />
+          <Heading size="2xl" className="text-white tracking-tight mb-1 text-center">
+            Welcome back
+          </Heading>
+          <Text size="sm" className="text-white/60 text-center">
+            Sign in to continue your journey
+          </Text>
         </Box>
 
-        {/* Form Card */}
+        {/* Form */}
         <Box
           className="flex-1 bg-background rounded-t-3xl"
           style={{ marginTop: -16, paddingBottom: insets.bottom + 32, paddingHorizontal: 24, paddingTop: 32 }}
         >
-          {/* Heading */}
-          <VStack space="xs" className="mb-7">
-            <Heading size="xl" className="text-foreground tracking-tight">
-              Welcome back
-            </Heading>
-            <Text size="sm" className="text-muted-foreground">
-              Sign in to continue your journey
-            </Text>
-          </VStack>
-
           {/* Error */}
           {error ? (
             <Box className="bg-destructive/8 rounded-xl border border-destructive/19 px-3.5 py-2.5 mb-4">
@@ -118,7 +106,7 @@ export default function LoginScreen() {
                   autoCapitalize="none"
                   autoCorrect={false}
                   returnKeyType="next"
-                  onSubmitEditing={() => passwordRef.current?.focus()}
+                  onSubmitEditing={() => (passwordRef.current as any)?.focus()}
                 />
               </Input>
             </VStack>
@@ -151,7 +139,7 @@ export default function LoginScreen() {
           {/* Forgot Password */}
           <Pressable
             onPress={() => router.push('/(auth)/forgot-password')}
-            className="self-end mt-3 mb-7"
+            className="self-end mt-2 mb-7"
           >
             <Text size="sm" className="text-primary font-medium">Forgot password?</Text>
           </Pressable>

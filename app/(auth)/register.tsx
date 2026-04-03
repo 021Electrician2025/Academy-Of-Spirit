@@ -1,20 +1,20 @@
-import React, { useState, useRef } from 'react';
-import { Platform } from 'react-native';
 import { router } from 'expo-router';
+import { ArrowLeft, Eye, EyeOff, Lock, Mail, User } from 'lucide-react-native';
+import React, { useRef, useState } from 'react';
+import { Image, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, Eye, EyeOff, Mail, Lock, User } from 'lucide-react-native';
 
 import { Box } from '@/components/ui/box';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Text } from '@/components/ui/text';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { Button, ButtonText, ButtonSpinner } from '@/components/ui/button';
-import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
+import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
-import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { useAuth } from '@/context/auth-context';
 
 export default function RegisterScreen() {
@@ -72,19 +72,25 @@ export default function RegisterScreen() {
       >
         {/* Header */}
         <Box
-          className="bg-hero px-6 pb-8"
+          className="bg-hero px-6 pb-10"
           style={{ paddingTop: insets.top + 16 }}
         >
           <Pressable
             onPress={() => router.back()}
-            className="w-10 h-10 rounded-xl bg-white/8 items-center justify-center mb-7"
+            className="w-10 h-10 rounded-xl bg-white/8 items-center justify-center mb-4"
           >
             <Icon as={ArrowLeft} className="text-white/80" size="lg" />
           </Pressable>
-          <Heading size="2xl" className="text-white tracking-tight mb-1">
+          <Box className="items-center mb-4">
+            <Image
+              source={require('@/assets/AoS_Logo.png')}
+              style={{ width: 130, height: 130, resizeMode: 'contain' }}
+            />
+          </Box>
+          <Heading size="2xl" className="text-white tracking-tight mb-1 text-center">
             Create Account
           </Heading>
-          <Text size="sm" className="text-white/45">
+          <Text size="sm" className="text-white/60 text-center">
             Join and begin your inner journey
           </Text>
         </Box>
@@ -116,7 +122,7 @@ export default function RegisterScreen() {
                   autoCapitalize="words"
                   autoCorrect={false}
                   returnKeyType="next"
-                  onSubmitEditing={() => emailRef.current?.focus()}
+                  onSubmitEditing={() => (emailRef.current as any)?.focus()}
                 />
               </Input>
             </VStack>
@@ -137,7 +143,7 @@ export default function RegisterScreen() {
                   autoCapitalize="none"
                   autoCorrect={false}
                   returnKeyType="next"
-                  onSubmitEditing={() => passwordRef.current?.focus()}
+                  onSubmitEditing={() => (passwordRef.current as any)?.focus()}
                 />
               </Input>
             </VStack>

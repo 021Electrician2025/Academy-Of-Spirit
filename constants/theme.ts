@@ -13,6 +13,8 @@ export const Colors = {
     tabBarBorder: '#E5E1DC',
     tabIconDefault: '#6E6A6B',
     tabIconSelected: '#C79F27',
+    neuShadow: '#D1CCC7',
+    neuHighlight: '#FFFFFF',
   },
   dark: {
     text: '#FFFFFF',
@@ -26,6 +28,8 @@ export const Colors = {
     tabBarBorder: '#2E2E2E',
     tabIconDefault: '#AFAFAF',
     tabIconSelected: '#D4AF37',
+    neuShadow: '#0A0A0A',
+    neuHighlight: '#2C2C2C',
   },
 };
 

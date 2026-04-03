@@ -1,20 +1,20 @@
+import { router } from 'expo-router';
+import { ArrowLeft, CheckCircle, Mail } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Platform } from 'react-native';
-import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, Mail, CheckCircle } from 'lucide-react-native';
 
 import { Box } from '@/components/ui/box';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Text } from '@/components/ui/text';
+import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { Button, ButtonText, ButtonSpinner } from '@/components/ui/button';
-import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
+import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
 import { Pressable } from '@/components/ui/pressable';
 import { ScrollView } from '@/components/ui/scroll-view';
-import { KeyboardAvoidingView } from '@/components/ui/keyboard-avoiding-view';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { useAuth } from '@/context/auth-context';
 
 export default function ForgotPasswordScreen() {
